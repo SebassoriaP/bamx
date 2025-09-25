@@ -12,21 +12,39 @@ on:
 
 jobs:
   flutter-ci:
+    name: Flutter CI Build
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
+     
+      - name: Checkout repository
         uses: actions/checkout@v4
+
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.4'
 
+     
+      - name: Cache Flutter packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool/pub
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+
+  
       - name: Install dependencies
         run: flutter pub get
 
+   
       - name: Analyze code
         run: flutter analyze
+
 
       - name: Run tests
         run: flutter test
