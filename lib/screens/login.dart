@@ -29,13 +29,15 @@ class _LoginScreenState extends State<LoginScreen> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
-      }
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: $e")),
       );
@@ -44,7 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> register() async {
     try {
-      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
@@ -53,14 +56,15 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null) {
         await saveUserData(user.uid, user.email!, nameController.text.trim());
 
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const HomeScreen()),
-          );
-        }
+        if (!mounted) return;
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: $e")),
       );
@@ -75,12 +79,28 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(controller: nameController, decoration: const InputDecoration(hintText: "Nombre")),
-            TextField(controller: emailController, decoration: const InputDecoration(hintText: "Correo")),
-            TextField(controller: passwordController, obscureText: true, decoration: const InputDecoration(hintText: "Contraseña")),
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(hintText: "Nombre"),
+            ),
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(hintText: "Correo"),
+            ),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(hintText: "Contraseña"),
+            ),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: login, child: const Text("Ingresar")),
-            TextButton(onPressed: register, child: const Text("Registrarse")),
+            ElevatedButton(
+              onPressed: login,
+              child: const Text("Ingresar"),
+            ),
+            TextButton(
+              onPressed: register,
+              child: const Text("Registrarse"),
+            ),
           ],
         ),
       ),
