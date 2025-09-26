@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -13,15 +12,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final nameController = TextEditingController();
-
-  Future<void> saveUserData(String uid, String email, String name) async {
-    await FirebaseFirestore.instance.collection('users').doc(uid).set({
-      'email': email,
-      'name': name,
-      'createdAt': DateTime.now(),
-    });
-  }
+  final nameController = TextEditingController(); // optional, only local use
 
   Future<void> register() async {
     try {
@@ -34,12 +25,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       final user = userCredential.user;
 
       if (user != null) {
-        await saveUserData(
-          user.uid,
-          user.email ?? 'Sin correo', // Safe null check
-          nameController.text.trim(),
-        );
-
         if (!mounted) return;
 
         Navigator.pushReplacement(
@@ -63,9 +48,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            // Name field (optional, not stored in FirebaseAuth directly)
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(hintText: "Nombre"),
+              decoration: const InputDecoration(hintText: "Nombre (opcional)"),
             ),
             TextField(
               controller: emailController,
