@@ -66,7 +66,7 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: selectedColor,
+              initialValue: selectedColor,
               items: colors
                   .map((color) => DropdownMenuItem(
                         value: color,
