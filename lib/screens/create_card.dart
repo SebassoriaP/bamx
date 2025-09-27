@@ -18,6 +18,7 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
   Future<void> addCard() async {
     final name = nameController.text.trim();
     if (name.isEmpty) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Por favor ingresa un nombre'),
@@ -27,12 +28,17 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
       return;
     }
 
+    // Espera a que se agregue el documento
     await FirebaseFirestore.instance.collection('forms').add({
       'nombre': name,
       'color': selectedColor,
       'creacion': DateTime.now(),
     });
 
+    // Revisa mounted inmediatamente después del await
+    if (!mounted) return;
+
+    // Mensaje de éxito
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Formulario creado con éxito'),
@@ -40,13 +46,11 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
       ),
     );
 
-    // Redirigir a HomeScreen
-    if (context.mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
-    }
+    // Redirige a HomeScreen
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
   }
 
   @override
@@ -66,7 +70,7 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              initialValue: selectedColor,
+              value: selectedColor,
               items: colors
                   .map((color) => DropdownMenuItem(
                         value: color,
