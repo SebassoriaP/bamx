@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "462372264606",
+    "project_id": "tc2007b-a5487",
+    "storage_bucket": "tc2007b-a5487.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462372264606:android:1b79b51ef48ee150f7798f",
+        "android_client_info": {
+          "package_name": "com.example.bamx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0YqzbkEp56bUykrMR3mI3bAkwIwgwIuM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
