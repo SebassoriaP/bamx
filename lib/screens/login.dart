@@ -56,6 +56,21 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               BlueContainer(
                 heightFactor: 0.6,
+                overlays: const [
+                  Positioned(
+                    bottom: -42,
+                    left: -11,
+                    child: Text(
+                      "NOKEY",
+                      style: TextStyle(
+                        fontSize: 110,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  ),
+                ],
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
                   child: Column(
@@ -76,21 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-                overlays: const [
-                  Positioned(
-                    bottom: -42,
-                    left: -11,
-                    child: Text(
-                      "NOKEY",
-                      style: TextStyle(
-                        fontSize: 110,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                  ),
-                ],
               ),
 
               LoginFooter(

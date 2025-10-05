@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bamx/screens/login.dart';
 import 'package:bamx/screens/create_card.dart';
-import 'package:bamx/widgets/grid_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
