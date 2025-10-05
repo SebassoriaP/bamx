@@ -48,60 +48,79 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
+      body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              BlueContainer(
-                heightFactor: 0.6,
-                overlays: const [
-                  Positioned(
-                    bottom: -42,
-                    left: -11,
-                    child: Text(
-                      "NOKEY",
-                      style: TextStyle(
-                        fontSize: 110,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 2,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: screenHeight - MediaQuery.of(context).padding.vertical,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Shorter Blue container
+                  SizedBox(
+                    height: screenHeight * 0.6, // Adjust height here
+                    child: BlueContainer(
+                      overlays: const [
+                        Positioned(
+                          bottom: -42,
+                          left: -11,
+                          child: Text(
+                            "NOKEY",
+                            style: TextStyle(
+                              fontSize: 110,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ),
+                      ],
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              LoginForm(
+                                emailController: emailController,
+                                passwordController: passwordController,
+                                onLogin: login,
+                                onRegister: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const SignUpScreen()),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ],
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      LoginForm(
-                        emailController: emailController,
-                        passwordController: passwordController,
-                        onLogin: login,
-                        onRegister: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const SignUpScreen()),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
-              ),
 
-              LoginFooter(
-                onTestWidgets: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const TestGridScreen()),
-                  );
-                },
+                  // Footer stays at the bottom
+                  LoginFooter(
+                    onTestWidgets: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const TestGridScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
