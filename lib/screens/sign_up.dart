@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bamx/screens/home.dart';
+import 'package:bamx/utils/warning.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -32,12 +33,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
           MaterialPageRoute(builder: (_) => const HomeScreen()),
         );
       }
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
+    } 
+    on FirebaseAuthException catch (e) {
+    if (!mounted) return;
+
+    if (e.code == 'email-already-in-use') {
+      showErrorMessage(context, "Usuario existente");
+    } else {
+      showErrorMessage(context, "Correo o constraseña inválida. Asegurese de que su correo sea válido y que la contraseña tenga mínimo 6 caracteres");
     }
+  } catch (e) {
+    if (!mounted) return;
+    showErrorMessage(context, "Ocurrió un error inesperado");
+    
+  }
   }
 
   @override
@@ -49,10 +58,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Column(
           children: [
             // Name field (optional, not stored in FirebaseAuth directly)
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(hintText: "Nombre (opcional)"),
-            ),
+            // TextField(
+            //   controller: nameController,
+            //   decoration: const InputDecoration(hintText: "Nombre (opcional)"),
+            // ),
             TextField(
               controller: emailController,
               decoration: const InputDecoration(hintText: "Correo"),

@@ -80,6 +80,7 @@ class LoginForm extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.purple,
                   decoration: TextDecoration.underline,
+                  decorationColor: Colors.purple,
                   fontWeight: FontWeight.bold,
                 ),
               ),
