@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'login.dart';
-import 'create_card.dart'; // importa tu pantalla de creación
+import 'package:bamx/screens/login.dart';
+import 'package:bamx/screens/create_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -55,15 +55,21 @@ class HomeScreen extends StatelessWidget {
               style: const TextStyle(fontSize: 18),
             ),
           ),
+
+          const Divider(thickness: 1, height: 32),
+
+          // === Firestore list of forms ===
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('forms').snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection('forms').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text("No hay formularios disponibles"));
+                  return const Center(
+                      child: Text("No hay formularios disponibles"));
                 }
 
                 final docs = snapshot.data!.docs;
@@ -77,8 +83,10 @@ class HomeScreen extends StatelessWidget {
                     final color = parseColor(colorString);
 
                     return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
                         color: color,
                         borderRadius: BorderRadius.circular(12),
@@ -98,11 +106,12 @@ class HomeScreen extends StatelessWidget {
                               name,
                               style: TextStyle(
                                 fontSize: 18,
-                                color: color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+                                color: color.computeLuminance() > 0.5
+                                    ? Colors.black
+                                    : Colors.white,
                               ),
                             ),
                           ),
-                          // Botón circular amarillo
                           ElevatedButton(
                             onPressed: () {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -111,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),
-                              backgroundColor: const Color(0xFFFFC107), // amarillo
+                              backgroundColor: const Color(0xFFFFC107),
                               padding: const EdgeInsets.all(16),
                             ),
                             child: const Icon(
@@ -130,7 +139,6 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
 
-      // Botón flotante para crear nuevas tarjetas
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFFFFC107),
         child: const Icon(Icons.add, color: Colors.black),
