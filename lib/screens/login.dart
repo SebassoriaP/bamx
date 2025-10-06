@@ -6,6 +6,7 @@ import 'package:bamx/screens/widget_testing.dart';
 import 'package:bamx/widgets/login/login_form.dart';
 import 'package:bamx/widgets/login/login_footer.dart';
 import 'package:bamx/widgets/blue_container_widget.dart';
+import 'package:bamx/utils/warning.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -31,20 +32,17 @@ class _LoginScreenState extends State<LoginScreen> {
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "No se pudo iniciar sesión. Verifica tu usuario y contraseña.",
-            style: TextStyle(fontSize: 16),
-          ),
-          backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 3),
-        ),
-      );
-    }
+    }  on FirebaseAuthException catch (_) {
+    if (!mounted) return;
+
+    // Error Managment for Authentication
+    showErrorMessage(context, "No se pudo iniciar sesión. Verifica tu usuario y contraseña");
+
+  } catch (e) {
+    if (!mounted) return;
+    showErrorMessage(context, "Ocurrió un error inesperado");
   }
+}
 
   @override
   Widget build(BuildContext context) {
