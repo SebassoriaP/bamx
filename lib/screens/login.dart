@@ -5,7 +5,7 @@ import 'package:bamx/screens/sign_up.dart';
 import 'package:bamx/screens/widget_testing.dart';
 import 'package:bamx/widgets/login/login_form.dart';
 import 'package:bamx/widgets/login/login_footer.dart';
-import 'package:bamx/widgets/blue_container_widget.dart';
+import 'package:bamx/widgets/container_widget.dart';
 import 'package:bamx/utils/warning.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Blue container takes flexible space
                       Expanded(
                         flex: 6,
-                        child: BlueContainer(
+                        child: FlexibleContainer(
                           overlays: const [
                             Positioned(
                               bottom: -42,
