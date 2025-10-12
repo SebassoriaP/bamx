@@ -3,10 +3,12 @@ import 'package:bamx/widgets/button_widget.dart';
 
 class LoginFooter extends StatelessWidget {
   final VoidCallback onTestWidgets;
+  final VoidCallback onTestFormCreation;
 
   const LoginFooter({
     super.key,
     required this.onTestWidgets,
+    required this.onTestFormCreation,
   });
 
   @override
@@ -15,10 +17,17 @@ class LoginFooter extends StatelessWidget {
       children: [
         // Botón de prueba widgets
         ButtonWidget(
-            text: "Probar Widgets",
+            text: "Try Out Widgets",
             textColor: Colors.black,
             color: Colors.greenAccent,
             onPressed: onTestWidgets,
+        ),
+
+        ButtonWidget(
+            text: "Try Out Form Creation",
+            textColor: Colors.black,
+            color: Colors.yellowAccent,
+            onPressed: onTestFormCreation,
         ),
       ],
     );

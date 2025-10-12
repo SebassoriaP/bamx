@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:bamx/screens/home.dart';
 import 'package:bamx/screens/sign_up.dart';
 import 'package:bamx/screens/widget_testing.dart';
+import 'package:bamx/screens/form_creation.dart';
+
 import 'package:bamx/widgets/login/login_form.dart';
 import 'package:bamx/widgets/login/login_footer.dart';
 import 'package:bamx/widgets/container_widget.dart';
+
 import 'package:bamx/utils/warning.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -60,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: IntrinsicHeight(
                   child: Column(
                     children: [
-                      // Blue container takes flexible space
                       Expanded(
                         flex: 6,
                         child: FlexibleContainer(
@@ -113,6 +116,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => const TestGridScreen()),
+                          );
+                        },
+
+                        onTestFormCreation: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const FormCreationScreen()),
                           );
                         },
                       ),
