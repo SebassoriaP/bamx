@@ -23,10 +23,12 @@ class LoginFooter extends StatelessWidget {
             onPressed: onTestWidgets,
         ),
 
+        const SizedBox(height: 12),
+
         ButtonWidget(
             text: "Try Out Form Creation",
             textColor: Colors.black,
-            color: Colors.yellowAccent,
+            color: Colors.pinkAccent,
             onPressed: onTestFormCreation,
         ),
       ],
