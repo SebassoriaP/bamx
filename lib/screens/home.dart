@@ -61,15 +61,17 @@ class HomeScreen extends StatelessWidget {
           // === Firestore list of forms ===
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection('forms').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('forms')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(
-                      child: Text("No hay formularios disponibles"));
+                    child: Text("No hay formularios disponibles"),
+                  );
                 }
 
                 final docs = snapshot.data!.docs;
@@ -84,9 +86,13 @@ class HomeScreen extends StatelessWidget {
 
                     return Container(
                       margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         color: color,
                         borderRadius: BorderRadius.circular(12),
@@ -115,7 +121,9 @@ class HomeScreen extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Botón presionado: $name')),
+                                SnackBar(
+                                  content: Text('Botón presionado: $name'),
+                                ),
                               );
                             },
                             style: ElevatedButton.styleFrom(

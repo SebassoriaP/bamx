@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:bamx/widgets/form_modules/grid_widget.dart';
-import 'package:bamx/widgets/form_modules/slider_widget.dart'; 
-import 'package:bamx/widgets/form_modules/card_widget.dart'; 
+import 'package:bamx/widgets/form_modules/slider_widget.dart';
+import 'package:bamx/widgets/form_modules/card_widget.dart';
 import 'package:bamx/widgets/form_modules/checkbox_widget.dart';
 import 'package:bamx/widgets/form_modules/textbox_widget.dart';
-
 
 class TestGridScreen extends StatefulWidget {
   const TestGridScreen({super.key});
@@ -47,7 +46,6 @@ class _TestGridScreenState extends State<TestGridScreen> {
               ),
               const SizedBox(height: 40),
 
-
               CustomSlider(
                 question: "¿Qué alimentos te gustan?",
                 min: 0,
@@ -66,7 +64,7 @@ class _TestGridScreenState extends State<TestGridScreen> {
               SizedBox(
                 height: 400,
                 child: CardWidget(
-                  title:"Preguntas tipo Tinder (Sí / No)",
+                  title: "Preguntas tipo Tinder (Sí / No)",
                   questions: const [
                     "¿Te gusta la pizza?",
                     "¿Has viajado al extranjero?",
@@ -75,13 +73,12 @@ class _TestGridScreenState extends State<TestGridScreen> {
                   ],
                   onAnswered: (question, answer) {
                     debugPrint(
-                        'Pregunta: "$question" → ${answer ? "Sí" : "No"}');
+                      'Pregunta: "$question" → ${answer ? "Sí" : "No"}',
+                    );
                   },
                 ),
               ),
-              
-              
-              
+
               const SizedBox(height: 50),
 
               // MultipleChoiceQuestion
@@ -103,8 +100,6 @@ class _TestGridScreenState extends State<TestGridScreen> {
                   debugPrint("Texto ingresado: $value");
                 },
               ),
-
-              
             ],
           ),
         ),

@@ -19,9 +19,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       final userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
 
       final user = userCredential.user;
 
@@ -33,20 +33,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
           MaterialPageRoute(builder: (_) => const HomeScreen()),
         );
       }
-    } 
-    on FirebaseAuthException catch (e) {
-    if (!mounted) return;
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
 
-    if (e.code == 'email-already-in-use') {
-      showErrorMessage(context, "Usuario existente");
-    } else {
-      showErrorMessage(context, "Correo o constraseña inválida. Asegurese de que su correo sea válido y que la contraseña tenga mínimo 6 caracteres");
+      if (e.code == 'email-already-in-use') {
+        showErrorMessage(context, "Usuario existente");
+      } else {
+        showErrorMessage(
+          context,
+          "Correo o constraseña inválida. Asegurese de que su correo sea válido y que la contraseña tenga mínimo 6 caracteres",
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      showErrorMessage(context, "Ocurrió un error inesperado");
     }
-  } catch (e) {
-    if (!mounted) return;
-    showErrorMessage(context, "Ocurrió un error inesperado");
-    
-  }
   }
 
   @override

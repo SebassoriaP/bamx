@@ -6,7 +6,6 @@ class FlexibleContainer extends StatelessWidget {
   final double heightFactor;
   final List<Widget>? overlays;
 
-
   final Color? color;
   final double borderRadius;
 
@@ -15,7 +14,7 @@ class FlexibleContainer extends StatelessWidget {
     required this.child,
     this.heightFactor = 0.75,
     this.overlays,
-    this.color, 
+    this.color,
     this.borderRadius = 30,
   });
 

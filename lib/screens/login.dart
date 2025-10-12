@@ -36,21 +36,22 @@ class _LoginScreenState extends State<LoginScreen> {
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
-    }  on FirebaseAuthException catch (_) {
-    if (!mounted) return;
+    } on FirebaseAuthException catch (_) {
+      if (!mounted) return;
 
-    // Error Managment for Authentication
-    showErrorMessage(context, "No se pudo iniciar sesión. Verifica tu usuario y contraseña");
-
-  } catch (e) {
-    if (!mounted) return;
-    showErrorMessage(context, "Ocurrió un error inesperado");
+      // Error Managment for Authentication
+      showErrorMessage(
+        context,
+        "No se pudo iniciar sesión. Verifica tu usuario y contraseña",
+      );
+    } catch (e) {
+      if (!mounted) return;
+      showErrorMessage(context, "Ocurrió un error inesperado");
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -58,9 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (context, constraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: Column(
                     children: [
@@ -84,7 +83,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                           child: Center(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24.0,
+                              ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -96,8 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) =>
-                                                const SignUpScreen()),
+                                          builder: (_) => const SignUpScreen(),
+                                        ),
                                       );
                                     },
                                   ),
@@ -115,7 +116,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const TestGridScreen()),
+                              builder: (_) => const TestGridScreen(),
+                            ),
                           );
                         },
 
@@ -123,7 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const FormCreationScreen()),
+                              builder: (_) => const FormCreationScreen(),
+                            ),
                           );
                         },
                       ),

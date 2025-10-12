@@ -41,8 +41,16 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
               const SizedBox(height: 20),
               _buildCardOption("Grid", Icons.grid_view, NokeyColorPalette.blue),
               _buildCardOption("Slider", Icons.tune, NokeyColorPalette.yellow),
-              _buildCardOption("Checkbox", Icons.check_box, NokeyColorPalette.purple),
-              _buildCardOption("Card Swipe", Icons.swipe, NokeyColorPalette.darkBlue),
+              _buildCardOption(
+                "Checkbox",
+                Icons.check_box,
+                NokeyColorPalette.purple,
+              ),
+              _buildCardOption(
+                "Card Swipe",
+                Icons.swipe,
+                NokeyColorPalette.darkBlue,
+              ),
             ],
           ),
         );
@@ -77,46 +85,45 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
 
   void _addInlineCard(String type) {
     setState(() {
-        _cards.add({
+      _cards.add({
         "id": uuid.v4(),
         "type": type,
         // Initialize variables depending on type
         "variables": (type == "Grid")
             ? [
                 {"name": "", "min": "", "max": ""},
-                {"name": "", "min": "", "max": ""}
-                ]
+                {"name": "", "min": "", "max": ""},
+              ]
             : (type == "Slider")
-                ? [
-                    {"name": "", "min": "", "max": ""}
-                    ]
-                : [],
+            ? [
+                {"name": "", "min": "", "max": ""},
+              ]
+            : [],
         // Initialize questions if type needs them
         "questions": (type == "Checkbox" || type == "Card Swipe") ? [""] : [],
-        });
+      });
     });
-    }
+  }
 
-    void _removeCard(int index) {
-        setState(() {
-            final card = _cards[index];
+  void _removeCard(int index) {
+    setState(() {
+      final card = _cards[index];
 
-            // Only remove variable names if variables exist and are maps
-            final vars = card["variables"];
-            if (vars != null && vars is List<Map<String, String>>) {
-            for (var v in vars) {
-                _usedVariableNames.remove(v["name"]);
-            }
-            }
+      // Only remove variable names if variables exist and are maps
+      final vars = card["variables"];
+      if (vars != null && vars is List<Map<String, String>>) {
+        for (var v in vars) {
+          _usedVariableNames.remove(v["name"]);
+        }
+      }
 
-            // Optionally, you could also remove used questions if you track them:
-            // final questions = card["questions"];
-            // if (questions != null && questions is List<String>) { ... }
+      // Optionally, you could also remove used questions if you track them:
+      // final questions = card["questions"];
+      // if (questions != null && questions is List<String>) { ... }
 
-            _cards.removeAt(index);
-        });
-  
-}
+      _cards.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +174,11 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                 },
                 children: [
                   for (int i = 0; i < _cards.length; i++)
-                    _buildEditableCard(_cards[i], i, key: ValueKey(_cards[i]["id"])),
+                    _buildEditableCard(
+                      _cards[i],
+                      i,
+                      key: ValueKey(_cards[i]["id"]),
+                    ),
                 ],
               ),
             ),
@@ -229,7 +240,10 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete, color: NokeyColorPalette.mexicanPink),
+                  icon: const Icon(
+                    Icons.delete,
+                    color: NokeyColorPalette.mexicanPink,
+                  ),
                   onPressed: () => _removeCard(index),
                 ),
               ],
@@ -247,24 +261,24 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
 
   Widget _buildGridFields(Map<String, dynamic> card) {
     card["variables"] ??= [
-        {"name": "", "min": "", "max": ""},
-        {"name": "", "min": "", "max": ""}
+      {"name": "", "min": "", "max": ""},
+      {"name": "", "min": "", "max": ""},
     ];
 
     return Column(
-        children: List.generate(card["variables"].length, (i) {
+      children: List.generate(card["variables"].length, (i) {
         return _buildVariableInput(card, i);
-        }),
+      }),
     );
-    }
+  }
 
   Widget _buildSliderFields(Map<String, dynamic> card) {
     card["variables"] ??= [
-        {"name": "", "min": "", "max": ""}
+      {"name": "", "min": "", "max": ""},
     ];
 
     return _buildVariableInput(card, 0);
-    }
+  }
 
   Widget _buildVariableInput(Map<String, dynamic> card, int i) {
     final variable = card["variables"][i];
@@ -300,7 +314,6 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
     );
   }
 
-  
   Widget _buildQuestionFields(Map<String, dynamic> card) {
     card["questions"] ??= [];
 
@@ -308,23 +321,23 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
     if (card["questions"].isEmpty) card["questions"].add("");
 
     return Column(
-        children: [
+      children: [
         for (int i = 0; i < card["questions"].length; i++)
-            Padding(
+          Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: TextField(
-                decoration: InputDecoration(labelText: "Question ${i + 1}"),
-                onChanged: (val) => card["questions"][i] = val,
+              decoration: InputDecoration(labelText: "Question ${i + 1}"),
+              onChanged: (val) => card["questions"][i] = val,
             ),
-            ),
+          ),
         TextButton.icon(
-            onPressed: () {
+          onPressed: () {
             setState(() => card["questions"].add(""));
-            },
-            icon: const Icon(Icons.add_circle_outline),
-            label: const Text("Add Question"),
+          },
+          icon: const Icon(Icons.add_circle_outline),
+          label: const Text("Add Question"),
         ),
-        ],
+      ],
     );
   }
 }

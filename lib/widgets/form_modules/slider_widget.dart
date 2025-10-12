@@ -33,19 +33,14 @@ class _CustomSliderState extends State<CustomSlider> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         Padding(
-        padding: const EdgeInsets.only(bottom: 20), 
-        child: Text(
-                widget.question,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  
-                ),
-              ),
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Text(
+            widget.question,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
-        
+
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 20, //Bar size
@@ -55,11 +50,11 @@ class _CustomSliderState extends State<CustomSlider> {
             overlayShape: const RoundSliderOverlayShape(
               overlayRadius: 22, // Slider effect
             ),
-            thumbColor: Color.fromRGBO(255,195,0,1), // Ball color
+            thumbColor: Color.fromRGBO(255, 195, 0, 1), // Ball color
             activeTrackColor: const Color.fromRGBO(116, 185, 228, 1),
             inactiveTrackColor: Colors.deepPurple.shade100,
             overlayColor: Color.fromARGB(241, 255, 213, 75).withValues(),
-            valueIndicatorColor: Colors.deepPurple, 
+            valueIndicatorColor: Colors.deepPurple,
           ),
           child: Slider(
             value: _currentValue,

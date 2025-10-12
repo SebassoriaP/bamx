@@ -18,19 +18,19 @@ class LoginFooter extends StatelessWidget {
       children: [
         // Botón de prueba widgets
         ButtonWidget(
-            text: "Try Out Widgets",
-            textColor: NokeyColorPalette.black,
-            color: NokeyColorPalette.green,
-            onPressed: onTestWidgets,
+          text: "Try Out Widgets",
+          textColor: NokeyColorPalette.black,
+          color: NokeyColorPalette.green,
+          onPressed: onTestWidgets,
         ),
 
         const SizedBox(height: 12),
 
         ButtonWidget(
-            text: "Try Out Form Creation",
-            textColor: NokeyColorPalette.black,
-            color: NokeyColorPalette.salmon,
-            onPressed: onTestFormCreation,
+          text: "Try Out Form Creation",
+          textColor: NokeyColorPalette.black,
+          color: NokeyColorPalette.salmon,
+          onPressed: onTestFormCreation,
         ),
       ],
     );

@@ -72,10 +72,12 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
             DropdownButtonFormField<String>(
               initialValue: selectedColor,
               items: colors
-                  .map((color) => DropdownMenuItem(
-                        value: color,
-                        child: Text(color[0].toUpperCase() + color.substring(1)),
-                      ))
+                  .map(
+                    (color) => DropdownMenuItem(
+                      value: color,
+                      child: Text(color[0].toUpperCase() + color.substring(1)),
+                    ),
+                  )
                   .toList(),
               onChanged: (value) {
                 if (value != null) {
