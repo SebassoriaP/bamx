@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bamx/utils/color_palette.dart';
 
 class FlexibleContainer extends StatelessWidget {
   final Widget child;
@@ -7,7 +8,6 @@ class FlexibleContainer extends StatelessWidget {
 
 
   final Color? color;
-  final Gradient? gradient;
   final double borderRadius;
 
   const FlexibleContainer({
@@ -16,7 +16,6 @@ class FlexibleContainer extends StatelessWidget {
     this.heightFactor = 0.75,
     this.overlays,
     this.color, 
-    this.gradient,
     this.borderRadius = 30,
   });
 
@@ -28,16 +27,7 @@ class FlexibleContainer extends StatelessWidget {
       height: MediaQuery.of(context).size.height * heightFactor,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
-        // default color if it's not defined where it is used
-        color: color,
-        gradient: color == null
-            ? (gradient ??
-                const LinearGradient(
-                  colors: [Color(0xFF00AEEF), Color(0xFF3AB0FF)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ))
-            : null,
+        color: color ?? NokeyColorPalette.blue,
       ),
       child: Stack(
         children: [

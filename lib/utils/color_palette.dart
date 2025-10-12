@@ -10,4 +10,5 @@ class NokeyColorPalette {
   static const Color blueGrey = Color(0xFFCDE5EE);
   static const Color salmon = Color(0xFFFF8C8E);
   static const Color mexicanPink = Color(0xFFFF007B);
+  static const Color green = Color(0xFF09EBC6);
 }

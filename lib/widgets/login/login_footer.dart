@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bamx/widgets/button_widget.dart';
+import 'package:bamx/utils/color_palette.dart';
 
 class LoginFooter extends StatelessWidget {
   final VoidCallback onTestWidgets;
@@ -18,8 +19,8 @@ class LoginFooter extends StatelessWidget {
         // Botón de prueba widgets
         ButtonWidget(
             text: "Try Out Widgets",
-            textColor: Colors.black,
-            color: Colors.greenAccent,
+            textColor: NokeyColorPalette.black,
+            color: NokeyColorPalette.green,
             onPressed: onTestWidgets,
         ),
 
@@ -27,8 +28,8 @@ class LoginFooter extends StatelessWidget {
 
         ButtonWidget(
             text: "Try Out Form Creation",
-            textColor: Colors.black,
-            color: Colors.pinkAccent,
+            textColor: NokeyColorPalette.black,
+            color: NokeyColorPalette.salmon,
             onPressed: onTestFormCreation,
         ),
       ],
