@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:uuid/uuid.dart';
+import 'package:bamx/utils/color_palette.dart';
 
 final uuid = Uuid();
 
@@ -19,7 +20,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
   void _addCardDialog() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color.fromRGBO(230, 255, 243, 1),
+      backgroundColor: NokeyColorPalette.blueGrey,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
@@ -34,14 +35,14 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 22,
-                  color: Color.fromRGBO(24, 35, 156, 1),
+                  color: NokeyColorPalette.darkBlue,
                 ),
               ),
               const SizedBox(height: 20),
-              _buildCardOption("Grid", Icons.grid_view, Colors.teal),
-              _buildCardOption("Slider", Icons.tune, Colors.orangeAccent),
-              _buildCardOption("Checkbox", Icons.check_box, Colors.purpleAccent),
-              _buildCardOption("Card Swipe", Icons.swipe, Colors.cyanAccent),
+              _buildCardOption("Grid", Icons.grid_view, NokeyColorPalette.blue),
+              _buildCardOption("Slider", Icons.tune, NokeyColorPalette.yellow),
+              _buildCardOption("Checkbox", Icons.check_box, NokeyColorPalette.purple),
+              _buildCardOption("Card Swipe", Icons.swipe, NokeyColorPalette.darkBlue),
             ],
           ),
         );
@@ -55,7 +56,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
-          foregroundColor: Colors.white,
+          foregroundColor: NokeyColorPalette.white,
           minimumSize: const Size(260, 50),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
@@ -120,16 +121,16 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+      backgroundColor: NokeyColorPalette.white,
       appBar: AppBar(
         title: const Text(
           "Form Template Creator",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: const Color(0xFFFFFFFF),
+            color: NokeyColorPalette.white,
           ),
         ),
-        backgroundColor: const Color(0xFF00AEEF),
+        backgroundColor: NokeyColorPalette.blue,
         elevation: 0,
         centerTitle: true,
       ),
@@ -143,11 +144,11 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
               decoration: InputDecoration(
                 labelText: "Form Title",
                 labelStyle: const TextStyle(
-                  color: Color.fromRGBO(24, 35, 156, 1),
+                  color: NokeyColorPalette.darkBlue,
                   fontWeight: FontWeight.w600,
                 ),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: NokeyColorPalette.white,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -182,8 +183,8 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromRGBO(255, 235, 153, 1),
-                foregroundColor: const Color.fromRGBO(0, 123, 151, 1),
+                backgroundColor: NokeyColorPalette.yellow,
+                foregroundColor: NokeyColorPalette.black,
                 minimumSize: const Size(double.infinity, 55),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18),
@@ -200,10 +201,10 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
   Widget _buildEditableCard(Map<String, dynamic> card, int index, {Key? key}) {
     final type = card["type"];
     final colorMap = {
-      "Grid": Colors.tealAccent.shade100,
-      "Slider": Colors.orangeAccent.shade100,
-      "Checkbox": Colors.purpleAccent.shade100,
-      "Card Swipe": Colors.cyanAccent.shade100,
+      "Grid": NokeyColorPalette.blue,
+      "Slider": NokeyColorPalette.yellow,
+      "Checkbox": NokeyColorPalette.purple,
+      "Card Swipe": NokeyColorPalette.blueGrey,
     };
 
     return Card(
@@ -224,11 +225,11 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
-                    color: Color.fromRGBO(24, 35, 156, 1),
+                    color: NokeyColorPalette.black,
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.redAccent),
+                  icon: const Icon(Icons.delete, color: NokeyColorPalette.mexicanPink),
                   onPressed: () => _removeCard(index),
                 ),
               ],
