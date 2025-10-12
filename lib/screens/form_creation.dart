@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:reorderables/reorderables.dart';
 import 'package:uuid/uuid.dart';
+
+final uuid = Uuid();
 
 class FormCreationScreen extends StatefulWidget {
   const FormCreationScreen({super.key});
@@ -9,252 +12,364 @@ class FormCreationScreen extends StatefulWidget {
 }
 
 class _FormCreationScreenState extends State<FormCreationScreen> {
-  final TextEditingController _titleController = TextEditingController();
-  final List<FormComponent> _components = [];
-  final Uuid uuid = const Uuid();
+  final TextEditingController _formTitleController = TextEditingController();
+  final List<Map<String, dynamic>> _cards = [];
+  final List<String> _usedVariableNames = [];
 
-  void _addComponent(String type) {
-    setState(() {
-      _components.add(FormComponent(
-        id: uuid.v4(),
+  void _addCardDialog() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color.fromRGBO(230, 255, 243, 1),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (_) {
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              const Text(
+                "Add a new component",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: Color.fromRGBO(24, 35, 156, 1),
+                ),
+              ),
+              const SizedBox(height: 20),
+              _buildCardOption("Grid", Icons.grid_view, Colors.teal),
+              _buildCardOption("Slider", Icons.tune, Colors.orangeAccent),
+              _buildCardOption("Checkbox", Icons.check_box, Colors.purpleAccent),
+              _buildCardOption("Card Swipe", Icons.swipe, Colors.cyanAccent),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCardOption(String type, IconData icon, Color color) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(260, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+          _openCardConfig(type);
+        },
+        icon: Icon(icon, size: 24),
+        label: Text(
+          type,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+      ),
+    );
+  }
+
+  void _openCardConfig(String type) async {
+    final cardConfig = await showDialog<Map<String, dynamic>>(
+      context: context,
+      builder: (_) => CardConfigDialog(
         type: type,
-        config: {},
-      ));
-    });
-  }
+        usedNames: _usedVariableNames,
+      ),
+    );
 
-  void _deleteComponent(String id) {
-    setState(() {
-      _components.removeWhere((c) => c.id == id);
-    });
-  }
-
-  bool _isVariableNameDuplicate(String name, String currentId) {
-    for (var comp in _components) {
-      if (comp.id == currentId) continue;
-      if (comp.config.containsKey('variables')) {
-        for (var v in comp.config['variables']) {
-          if (v['name'] == name) return true;
-        }
-      }
-      if (comp.config.containsKey('variable')) {
-        if (comp.config['variable']['name'] == name) return true;
-      }
+    if (cardConfig != null) {
+      setState(() {
+        _cards.add(cardConfig);
+        _usedVariableNames.addAll(
+          (cardConfig["variables"] as List<String>?) ?? [],
+        );
+      });
     }
-    return false;
+  }
+
+  void _removeCard(int index) {
+    setState(() {
+      final vars = _cards[index]["variables"] as List<String>?;
+      if (vars != null) _usedVariableNames.removeWhere(vars.contains);
+      _cards.removeAt(index);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(197, 255, 199, 1),
       appBar: AppBar(
-        title: const Text('Form Template Builder'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: () {
-              // TODO: Implement save logic
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Template saved!')),
-              );
-            },
+        title: const Text(
+          "Form Template Creator",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color.fromRGBO(24, 35, 156, 1),
           ),
-        ],
+        ),
+        backgroundColor: const Color.fromRGBO(9, 235, 198, 1),
+        elevation: 0,
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Form Title',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Wrap(
-              spacing: 8,
-              children: [
-                for (var type in ['grid', 'slider', 'checkbox', 'cardSwipe'])
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.add),
-                    label: Text(type),
-                    onPressed: () => _addComponent(type),
-                  ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: ReorderableListView.builder(
-              itemCount: _components.length,
-              onReorder: (oldIndex, newIndex) {
-                setState(() {
-                  if (newIndex > oldIndex) newIndex -= 1;
-                  final item = _components.removeAt(oldIndex);
-                  _components.insert(newIndex, item);
-                });
-              },
-              itemBuilder: (context, index) {
-                final comp = _components[index];
-                return Card(
-                  key: ValueKey(comp.id),
-                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${comp.type[0].toUpperCase()}${comp.type.substring(1)} Component',
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _deleteComponent(comp.id),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        _buildComponentFields(comp),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildComponentFields(FormComponent comp) {
-    switch (comp.type) {
-      case 'grid':
-        comp.config['variables'] ??= [
-          {'name': '', 'min': '', 'max': ''},
-          {'name': '', 'min': '', 'max': ''}
-        ];
-        return Column(
-          children: List.generate(2, (i) {
-            final varData = comp.config['variables'][i];
-            return _variableInput(comp, varData, i);
-          }),
-        );
-
-      case 'slider':
-        comp.config['variable'] ??= {'name': '', 'min': '', 'max': ''};
-        return _variableInput(comp, comp.config['variable'], null);
-
-      case 'checkbox':
-      case 'cardSwipe':
-        comp.config['questions'] ??= <String>[];
-        return _questionList(comp);
-
-      default:
-        return const SizedBox();
-    }
-  }
-
-  Widget _variableInput(FormComponent comp, Map varData, int? index) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (index != null) Text('Variable ${index + 1}'),
-        Row(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
           children: [
+            // Title input
+            TextField(
+              controller: _formTitleController,
+              decoration: InputDecoration(
+                labelText: "Form Title",
+                labelStyle: const TextStyle(
+                  color: Color.fromRGBO(24, 35, 156, 1),
+                  fontWeight: FontWeight.w600,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Card List (reorderable)
             Expanded(
-              child: TextField(
-                decoration: const InputDecoration(labelText: 'Name'),
-                onChanged: (value) {
-                  if (_isVariableNameDuplicate(value, comp.id)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Duplicate variable name!'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                    return;
-                  }
-                  setState(() => varData['name'] = value);
+              child: ReorderableColumn(
+                onReorder: (oldIndex, newIndex) {
+                  setState(() {
+                    final card = _cards.removeAt(oldIndex);
+                    _cards.insert(newIndex, card);
+                  });
                 },
+                children: [
+                  for (int i = 0; i < _cards.length; i++)
+                    _buildPreviewCard(_cards[i], i, key: ValueKey(_cards[i]["id"])),
+                ],
               ),
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: TextField(
-                decoration: const InputDecoration(labelText: 'Min'),
-                keyboardType: TextInputType.number,
-                onChanged: (value) => varData['min'] = value,
+
+            const SizedBox(height: 20),
+
+            // Add new card button
+            ElevatedButton.icon(
+              onPressed: _addCardDialog,
+              icon: const Icon(Icons.add_circle_outline, size: 26),
+              label: const Text(
+                "Add New Card",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: TextField(
-                decoration: const InputDecoration(labelText: 'Max'),
-                keyboardType: TextInputType.number,
-                onChanged: (value) => varData['max'] = value,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromRGBO(255, 235, 153, 1),
+                foregroundColor: const Color.fromRGBO(0, 123, 151, 1),
+                minimumSize: const Size(double.infinity, 55),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                elevation: 6,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 10),
-      ],
+      ),
     );
   }
 
-  Widget _questionList(FormComponent comp) {
-    final questions = comp.config['questions'] as List<String>;
+  Widget _buildPreviewCard(Map<String, dynamic> card, int index, {Key? key}) {
+    final colorMap = {
+      "Grid": Colors.tealAccent.shade100,
+      "Slider": Colors.orangeAccent.shade100,
+      "Checkbox": Colors.purpleAccent.shade100,
+      "Card Swipe": Colors.cyanAccent.shade100,
+    };
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (int i = 0; i < questions.length; i++)
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: TextEditingController(text: questions[i]),
-                  decoration: InputDecoration(labelText: 'Question ${i + 1}'),
-                  onChanged: (value) => questions[i] = value,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: () {
-                  setState(() => questions.removeAt(i));
-                },
-              ),
-            ],
+    return Card(
+      key: key,
+      elevation: 8,
+      color: colorMap[card["type"]] ?? Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ListTile(
+        title: Text(
+          card["type"],
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Color.fromRGBO(24, 35, 156, 1),
           ),
-        TextButton.icon(
-          onPressed: () {
-            setState(() => questions.add(''));
-          },
-          icon: const Icon(Icons.add),
-          label: const Text('Add Question'),
         ),
-      ],
+        subtitle: Text(
+          card["details"],
+          style: const TextStyle(fontSize: 16),
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete, color: Colors.redAccent),
+          onPressed: () => _removeCard(index),
+        ),
+      ),
     );
   }
 }
 
-class FormComponent {
-  final String id;
+class CardConfigDialog extends StatefulWidget {
   final String type;
-  final Map<String, dynamic> config;
+  final List<String> usedNames;
 
-  FormComponent({
-    required this.id,
+  const CardConfigDialog({
+    super.key,
     required this.type,
-    required this.config,
+    required this.usedNames,
   });
+
+  @override
+  State<CardConfigDialog> createState() => _CardConfigDialogState();
+}
+
+class _CardConfigDialogState extends State<CardConfigDialog> {
+  final _varControllers = <TextEditingController>[];
+  final _minControllers = <TextEditingController>[];
+  final _maxControllers = <TextEditingController>[];
+  final _questions = <TextEditingController>[];
+
+  @override
+  void initState() {
+    super.initState();
+    final variableCount = widget.type == "Grid"
+        ? 2
+        : widget.type == "Slider"
+            ? 1
+            : 0;
+
+    for (int i = 0; i < variableCount; i++) {
+      _varControllers.add(TextEditingController());
+      _minControllers.add(TextEditingController());
+      _maxControllers.add(TextEditingController());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isQuestionType =
+        widget.type == "Checkbox" || widget.type == "Card Swipe";
+
+    return AlertDialog(
+      backgroundColor: const Color.fromRGBO(230, 255, 243, 1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Text(
+        "Configure ${widget.type}",
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(24, 35, 156, 1),
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (!isQuestionType)
+              for (int i = 0; i < _varControllers.length; i++)
+                _buildVariableField(i),
+            if (isQuestionType)
+              Column(
+                children: [
+                  for (int i = 0; i < _questions.length; i++)
+                    _buildQuestionField(i),
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() => _questions.add(TextEditingController()));
+                    },
+                    icon: const Icon(Icons.add_circle_outline),
+                    label: const Text("Add Question"),
+                  )
+                ],
+              ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Cancel"),
+        ),
+        ElevatedButton(
+          onPressed: _saveCard,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromRGBO(9, 235, 198, 1),
+          ),
+          child: const Text("Save"),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVariableField(int i) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        children: [
+          TextField(
+            controller: _varControllers[i],
+            decoration: const InputDecoration(labelText: "Variable Name"),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _minControllers[i],
+                  decoration: const InputDecoration(labelText: "Min"),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TextField(
+                  controller: _maxControllers[i],
+                  decoration: const InputDecoration(labelText: "Max"),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuestionField(int i) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: TextField(
+        controller: _questions[i],
+        decoration: InputDecoration(labelText: "Question ${i + 1}"),
+      ),
+    );
+  }
+
+  void _saveCard() {
+    final variables = _varControllers.map((c) => c.text.trim()).toList();
+    if (variables.any((v) => widget.usedNames.contains(v))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Variable name already used!")),
+      );
+      return;
+    }
+
+    final details = widget.type == "Grid" || widget.type == "Slider"
+        ? variables.map((v) => "$v (${_minControllers[0].text}-${_maxControllers[0].text})").join(", ")
+        : _questions.map((q) => q.text).join(", ");
+
+    Navigator.pop(context, {
+      "id": uuid.v4(),
+      "type": widget.type,
+      "variables": variables,
+      "details": details,
+    });
+  }
 }
