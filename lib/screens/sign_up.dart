@@ -58,11 +58,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Name field (optional, not stored in FirebaseAuth directly)
-            // TextField(
-            //   controller: nameController,
-            //   decoration: const InputDecoration(hintText: "Nombre (opcional)"),
-            // ),
             TextField(
               controller: emailController,
               decoration: const InputDecoration(hintText: "Correo"),
