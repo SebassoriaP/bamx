@@ -83,7 +83,10 @@ class _CardWidgetState extends State<CardWidget> {
             children: [
               // Title
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: NokeyColorPalette.blue,
                   borderRadius: BorderRadius.circular(12),
@@ -105,8 +108,9 @@ class _CardWidgetState extends State<CardWidget> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: NokeyColorPalette.white,
-                    borderRadius:
-                        BorderRadius.circular(widget.componentsBorderRadius),
+                    borderRadius: BorderRadius.circular(
+                      widget.componentsBorderRadius,
+                    ),
                   ),
                   child: Stack(
                     alignment: Alignment.center,
@@ -122,9 +126,11 @@ class _CardWidgetState extends State<CardWidget> {
                               color: const Color.fromRGBO(255, 140, 142, 1),
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(
-                                    widget.componentsBorderRadius),
+                                  widget.componentsBorderRadius,
+                                ),
                                 bottomLeft: Radius.circular(
-                                    widget.componentsBorderRadius),
+                                  widget.componentsBorderRadius,
+                                ),
                               ),
                             ),
                             child: const RotatedBox(
@@ -153,9 +159,11 @@ class _CardWidgetState extends State<CardWidget> {
                               color: NokeyColorPalette.lightYellow,
                               borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(
-                                    widget.componentsBorderRadius),
+                                  widget.componentsBorderRadius,
+                                ),
                                 bottomRight: Radius.circular(
-                                    widget.componentsBorderRadius),
+                                  widget.componentsBorderRadius,
+                                ),
                               ),
                             ),
                             child: const RotatedBox(
@@ -187,7 +195,8 @@ class _CardWidgetState extends State<CardWidget> {
                                   elevation: 8,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
-                                        widget.componentsBorderRadius),
+                                      widget.componentsBorderRadius,
+                                    ),
                                   ),
                                   color: const Color.fromRGBO(9, 235, 198, 1),
                                   child: SizedBox(
@@ -202,8 +211,12 @@ class _CardWidgetState extends State<CardWidget> {
                                           style: const TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.bold,
-                                            color:
-                                                Color.fromRGBO(24, 35, 156, 1),
+                                            color: Color.fromRGBO(
+                                              24,
+                                              35,
+                                              156,
+                                              1,
+                                            ),
                                           ),
                                         ),
                                       ),

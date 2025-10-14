@@ -20,7 +20,13 @@ class _TestGridScreenState extends State<TestGridScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nombre de Formulario', style: TextStyle(color: NokeyColorPalette.white, fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Nombre de Formulario',
+          style: TextStyle(
+            color: NokeyColorPalette.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: NokeyColorPalette.blue,
       ),
       body: SingleChildScrollView(
@@ -29,7 +35,6 @@ class _TestGridScreenState extends State<TestGridScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              
               SizedBox(
                 height: 300,
                 child: InteractiveGrid(
@@ -66,9 +71,7 @@ class _TestGridScreenState extends State<TestGridScreen> {
                   "¿Usas Flutter para tus proyectos?",
                 ],
                 onAnswered: (question, answer) {
-                  debugPrint(
-                    'Pregunta: "$question" → ${answer ? "Sí" : "No"}',
-                  );
+                  debugPrint('Pregunta: "$question" → ${answer ? "Sí" : "No"}');
                 },
               ),
 
