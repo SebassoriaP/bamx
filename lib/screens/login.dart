@@ -12,6 +12,7 @@ import 'package:bamx/widgets/login/login_footer.dart';
 import 'package:bamx/widgets/container_widget.dart';
 
 import 'package:bamx/utils/warning.dart';
+import '../utils/validators.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,32 +25,55 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  Future<void> login() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+Future<void> login() async {
+  final email = emailController.text.trim();
+  final password = passwordController.text.trim();
 
-      if (!mounted) return;
+  // Local validations before sending them to firebase
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
-    } on FirebaseAuthException catch (_) {
-      if (!mounted) return;
-
-      // Error Managment for Authentication
-      showErrorMessage(
-        context,
-        "No se pudo iniciar sesión. Verifica tu usuario y contraseña",
-      );
-    } catch (e) {
-      if (!mounted) return;
-      showErrorMessage(context, "Ocurrió un error inesperado");
-    }
+  if (email.isEmpty || password.isEmpty) {
+    showErrorMessage(context, "Por favor completa todos los campos.");
+    return;
   }
+
+  if (hasUnsafeCharacters(email) || hasUnsafeCharacters(password)) {
+      showErrorMessage(context,
+          "El correo o la contraseña contienen caracteres no permitidos (<, > o invisibles).");
+      return; 
+  }
+
+  if (!isValidEmail(email)) {
+    showErrorMessage(context, "Correo electrónico inválido"); //Change later for "Correo electrónico o contraseña incorrecta"
+    return;
+  }
+
+  if (!isValidPassword(password)) {
+    showErrorMessage(context,
+        "La contraseña es incorrecta");//Change later for "Correo electrónico o contraseña incorrecta"
+    return;
+  }
+
+  try {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
+  } on FirebaseAuthException catch (_) {
+    if (!mounted) return;
+    showErrorMessage(context,
+        "No se pudo iniciar sesión. Verifica tu usuario y contraseña.");
+  } catch (e) {
+    if (!mounted) return;
+    showErrorMessage(context, "Ocurrió un error inesperado");
+  }
+
 
   @override
   Widget build(BuildContext context) {
