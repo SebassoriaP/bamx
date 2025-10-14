@@ -6,6 +6,7 @@ class CustomSlider extends StatefulWidget {
   final double initialValue;
   final String question;
   final ValueChanged<double>? onChanged;
+  final double topPadding;
 
   const CustomSlider({
     super.key,
@@ -14,6 +15,7 @@ class CustomSlider extends StatefulWidget {
     this.max = 100,
     this.initialValue = 50,
     this.onChanged,
+    this.topPadding = 40.0,
   });
 
   @override
@@ -33,6 +35,8 @@ class _CustomSliderState extends State<CustomSlider> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: widget.topPadding),
+
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: Text(

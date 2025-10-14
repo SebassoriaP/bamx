@@ -117,10 +117,6 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
         }
       }
 
-      // Optionally, you could also remove used questions if you track them:
-      // final questions = card["questions"];
-      // if (questions != null && questions is List<String>) { ... }
-
       _cards.removeAt(index);
     });
   }
@@ -137,7 +133,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
             color: NokeyColorPalette.white,
           ),
         ),
-        backgroundColor: NokeyColorPalette.blue,
+        backgroundColor: NokeyColorPalette.purple,
         elevation: 0,
         centerTitle: true,
       ),
