@@ -12,7 +12,7 @@ import 'package:bamx/widgets/login/login_footer.dart';
 import 'package:bamx/widgets/container_widget.dart';
 
 import 'package:bamx/utils/warning.dart';
-import '../utils/validators.dart'; 
+import '../utils/validators.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -37,19 +37,26 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     if (hasUnsafeCharacters(email) || hasUnsafeCharacters(password)) {
-        showErrorMessage(context,
-            "El correo o la contraseña contienen caracteres no permitidos (<, > o invisibles).");
-        return; 
+      showErrorMessage(
+        context,
+        "El correo o la contraseña contienen caracteres no permitidos (<, > o invisibles).",
+      );
+      return;
     }
 
     if (!isValidEmail(email)) {
-      showErrorMessage(context, "Correo electrónico inválido"); //Change later for "Correo electrónico o contraseña incorrecta"
+      showErrorMessage(
+        context,
+        "Correo electrónico inválido",
+      ); //Change later for "Correo electrónico o contraseña incorrecta"
       return;
     }
 
     if (!isValidPassword(password)) {
-      showErrorMessage(context,
-          "La contraseña es incorrecta");//Change later for "Correo electrónico o contraseña incorrecta"
+      showErrorMessage(
+        context,
+        "La contraseña es incorrecta",
+      ); //Change later for "Correo electrónico o contraseña incorrecta"
       return;
     }
 
@@ -67,14 +74,15 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } on FirebaseAuthException catch (_) {
       if (!mounted) return;
-      showErrorMessage(context,
-          "No se pudo iniciar sesión. Verifica tu usuario y contraseña.");
+      showErrorMessage(
+        context,
+        "No se pudo iniciar sesión. Verifica tu usuario y contraseña.",
+      );
     } catch (e) {
       if (!mounted) return;
       showErrorMessage(context, "Ocurrió un error inesperado");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
