@@ -35,9 +35,7 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -45,10 +43,7 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
           children: [
             Text(
               widget.question,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             ...widget.options.map((option) {

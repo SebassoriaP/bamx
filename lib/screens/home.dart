@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bamx/screens/login.dart';
 import 'package:bamx/screens/create_card.dart';
+import 'package:bamx/utils/color_palette.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,17 +11,17 @@ class HomeScreen extends StatelessWidget {
   Color parseColor(String colorString) {
     switch (colorString.toLowerCase()) {
       case 'blanco':
-        return Colors.white;
+        return NokeyColorPalette.white;
       case 'rojo':
-        return Colors.red;
+        return NokeyColorPalette.mexicanPink;
       case 'azul':
-        return Colors.blue;
+        return NokeyColorPalette.blue;
       case 'verde':
-        return Colors.green;
+        return NokeyColorPalette.green;
       case 'amarillo':
-        return Colors.yellow;
+        return NokeyColorPalette.yellow;
       default:
-        return Colors.grey;
+        return NokeyColorPalette.blueGrey;
     }
   }
 
@@ -61,15 +62,17 @@ class HomeScreen extends StatelessWidget {
           // === Firestore list of forms ===
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection('forms').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('forms')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(
-                      child: Text("No hay formularios disponibles"));
+                    child: Text("No hay formularios disponibles"),
+                  );
                 }
 
                 final docs = snapshot.data!.docs;
@@ -84,9 +87,13 @@ class HomeScreen extends StatelessWidget {
 
                     return Container(
                       margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         color: color,
                         borderRadius: BorderRadius.circular(12),
@@ -107,25 +114,27 @@ class HomeScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 18,
                                 color: color.computeLuminance() > 0.5
-                                    ? Colors.black
-                                    : Colors.white,
+                                    ? NokeyColorPalette.black
+                                    : NokeyColorPalette.white,
                               ),
                             ),
                           ),
                           ElevatedButton(
                             onPressed: () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Botón presionado: $name')),
+                                SnackBar(
+                                  content: Text('Botón presionado: $name'),
+                                ),
                               );
                             },
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),
-                              backgroundColor: const Color(0xFFFFC107),
+                              backgroundColor: NokeyColorPalette.mexicanPink,
                               padding: const EdgeInsets.all(16),
                             ),
                             child: const Icon(
                               Icons.arrow_forward,
-                              color: Colors.black,
+                              color: NokeyColorPalette.black,
                             ),
                           ),
                         ],
@@ -140,8 +149,8 @@ class HomeScreen extends StatelessWidget {
       ),
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFFFFC107),
-        child: const Icon(Icons.add, color: Colors.black),
+        backgroundColor: NokeyColorPalette.yellow,
+        child: const Icon(Icons.add, color: NokeyColorPalette.black),
         onPressed: () {
           Navigator.push(
             context,
