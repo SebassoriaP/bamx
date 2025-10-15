@@ -51,9 +51,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         decoration: InputDecoration(
           labelText: widget.label,
           hintText: widget.hint,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.deepPurple, width: 2),
             borderRadius: BorderRadius.circular(16),

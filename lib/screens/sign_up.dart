@@ -23,11 +23,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       showErrorMessage(context, "Por favor completa todos los campos.");
       return;
     }
-    
+
     if (hasUnsafeCharacters(email) || hasUnsafeCharacters(password)) {
-      showErrorMessage(context,
-          "El correo o la contraseña contienen caracteres no permitidos (<, > o invisibles).");
-      return; 
+      showErrorMessage(
+        context,
+        "El correo o la contraseña contienen caracteres no permitidos (<, > o invisibles).",
+      );
+      return;
     }
 
     // Validación local antes de mandar a Firebase
@@ -37,17 +39,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     if (!isValidPassword(password)) {
-      showErrorMessage(context,
-          "Contraseña insegura. Use al menos 6 caracteres, una mayúscula y un número.");
+      showErrorMessage(
+        context,
+        "Contraseña insegura. Use al menos 6 caracteres, una mayúscula y un número.",
+      );
       return;
     }
 
     try {
-      
-      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
 
       final user = userCredential.user;
 
@@ -63,8 +64,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (e.code == 'email-already-in-use') {
         showErrorMessage(context, "Usuario existente");
       } else {
-        showErrorMessage(context,
-            "Correo o contraseña inválida. Asegúrese de que su correo sea válido y que la contraseña tenga mínimo 6 caracteres");
+        showErrorMessage(
+          context,
+          "Correo o contraseña inválida. Asegúrese de que su correo sea válido y que la contraseña tenga mínimo 6 caracteres",
+        );
       }
     } catch (e) {
       if (!mounted) return;

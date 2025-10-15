@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bamx/utils/color_palette.dart';
 
 class ButtonWidget extends StatelessWidget {
   final String text;
@@ -12,7 +13,7 @@ class ButtonWidget extends StatelessWidget {
     required this.text,
     required this.color,
     required this.onPressed,
-    this.textColor = Colors.white,
+    this.textColor = NokeyColorPalette.white,
     this.height = 55,
   });
 
@@ -23,9 +24,7 @@ class ButtonWidget extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
         foregroundColor: textColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         minimumSize: Size(double.infinity, height),
       ),
       child: Text(

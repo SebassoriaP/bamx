@@ -10,7 +10,10 @@ void main() {
     expect(find.widgetWithText(TextField, 'usuario'), findsOneWidget);
     expect(find.widgetWithText(TextField, 'contraseña'), findsOneWidget);
 
-    expect(find.widgetWithText(ElevatedButton, 'Iniciar Sesión'), findsOneWidget);
+    expect(
+      find.widgetWithText(ElevatedButton, 'Iniciar Sesión'),
+      findsOneWidget,
+    );
 
     expect(find.widgetWithText(TextButton, 'REGISTRARME'), findsOneWidget);
 

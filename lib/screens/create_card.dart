@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bamx/screens/home.dart';
+import 'package:bamx/utils/color_palette.dart';
 
 class CreateCardScreen extends StatefulWidget {
   const CreateCardScreen({super.key});
@@ -22,7 +23,7 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Por favor ingresa un nombre'),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: NokeyColorPalette.mexicanPink,
         ),
       );
       return;
@@ -42,7 +43,7 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Formulario creado con éxito'),
-        backgroundColor: Colors.green,
+        backgroundColor: NokeyColorPalette.green,
       ),
     );
 
@@ -72,10 +73,12 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
             DropdownButtonFormField<String>(
               initialValue: selectedColor,
               items: colors
-                  .map((color) => DropdownMenuItem(
-                        value: color,
-                        child: Text(color[0].toUpperCase() + color.substring(1)),
-                      ))
+                  .map(
+                    (color) => DropdownMenuItem(
+                      value: color,
+                      child: Text(color[0].toUpperCase() + color.substring(1)),
+                    ),
+                  )
                   .toList(),
               onChanged: (value) {
                 if (value != null) {
@@ -95,8 +98,8 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
               child: ElevatedButton(
                 onPressed: addCard,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFC107),
-                  foregroundColor: Colors.black,
+                  backgroundColor: NokeyColorPalette.yellow,
+                  foregroundColor: NokeyColorPalette.black,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 child: const Text(
