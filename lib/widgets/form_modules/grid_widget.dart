@@ -55,14 +55,14 @@ class _InteractiveGridState extends State<InteractiveGrid> {
             }
 
             return GestureDetector(
-              onPanStart: (details) => _updatePosition(details.localPosition, Size(width, height)),
-              onPanUpdate: (details) => _updatePosition(details.localPosition, Size(width, height)),
+              onPanStart: (details) =>
+                  _updatePosition(details.localPosition, Size(width, height)),
+              onPanUpdate: (details) =>
+                  _updatePosition(details.localPosition, Size(width, height)),
               child: SizedBox(
                 width: width,
                 height: height,
-                child: CustomPaint(
-                  painter: _GridPainter(dotPosition),
-                ),
+                child: CustomPaint(painter: _GridPainter(dotPosition)),
               ),
             );
           },
@@ -100,8 +100,16 @@ class _GridPainter extends CustomPainter {
     final axisPaint = Paint()
       ..color = Colors.black
       ..strokeWidth = 2;
-    canvas.drawLine(Offset(size.width / 2, 0), Offset(size.width / 2, size.height), axisPaint);
-    canvas.drawLine(Offset(0, size.height / 2), Offset(size.width, size.height / 2), axisPaint);
+    canvas.drawLine(
+      Offset(size.width / 2, 0),
+      Offset(size.width / 2, size.height),
+      axisPaint,
+    );
+    canvas.drawLine(
+      Offset(0, size.height / 2),
+      Offset(size.width, size.height / 2),
+      axisPaint,
+    );
 
     // Draw dot
     canvas.drawCircle(dotPosition, 10, dotPaint);

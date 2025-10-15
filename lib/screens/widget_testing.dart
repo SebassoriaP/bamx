@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:bamx/widgets/form_modules/grid_widget.dart';
-import 'package:bamx/widgets/form_modules/slider_widget.dart'; 
-import 'package:bamx/widgets/form_modules/card_widget.dart'; 
+import 'package:bamx/widgets/form_modules/slider_widget.dart';
+import 'package:bamx/widgets/form_modules/card_widget.dart';
 import 'package:bamx/widgets/form_modules/checkbox_widget.dart';
 import 'package:bamx/widgets/form_modules/textbox_widget.dart';
-
+import 'package:bamx/utils/color_palette.dart';
 
 class TestGridScreen extends StatefulWidget {
   const TestGridScreen({super.key});
@@ -20,8 +20,14 @@ class _TestGridScreenState extends State<TestGridScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Test Grid + Slider + Cards'),
-        backgroundColor: Colors.deepPurple,
+        title: const Text(
+          'Nombre de Formulario',
+          style: TextStyle(
+            color: NokeyColorPalette.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: NokeyColorPalette.blue,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -29,12 +35,6 @@ class _TestGridScreenState extends State<TestGridScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // 🟦 Interactive Grid
-              const Text(
-                '🟦 Interfaz de cuadrícula interactiva',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
               SizedBox(
                 height: 300,
                 child: InteractiveGrid(
@@ -45,10 +45,9 @@ class _TestGridScreenState extends State<TestGridScreen> {
                   },
                 ),
               ),
-              const SizedBox(height: 40),
-
 
               CustomSlider(
+                topPadding: 40,
                 question: "¿Qué alimentos te gustan?",
                 min: 0,
                 max: 100,
@@ -60,29 +59,21 @@ class _TestGridScreenState extends State<TestGridScreen> {
                   debugPrint('Nuevo valor del slider: $value');
                 },
               ),
-              const SizedBox(height: 50),
 
               // Swipe Cards
-              SizedBox(
+              CardWidget(
                 height: 400,
-                child: CardWidget(
-                  title:"Preguntas tipo Tinder (Sí / No)",
-                  questions: const [
-                    "¿Te gusta la pizza?",
-                    "¿Has viajado al extranjero?",
-                    "¿Te consideras una persona puntual?",
-                    "¿Usas Flutter para tus proyectos?",
-                  ],
-                  onAnswered: (question, answer) {
-                    debugPrint(
-                        'Pregunta: "$question" → ${answer ? "Sí" : "No"}');
-                  },
-                ),
+                title: "Preguntas tipo Tinder (Sí / No)",
+                questions: const [
+                  "¿Te gusta la pizza?",
+                  "¿Has viajado al extranjero?",
+                  "¿Te consideras una persona puntual?",
+                  "¿Usas Flutter para tus proyectos?",
+                ],
+                onAnswered: (question, answer) {
+                  debugPrint('Pregunta: "$question" → ${answer ? "Sí" : "No"}');
+                },
               ),
-              
-              
-              
-              const SizedBox(height: 50),
 
               // MultipleChoiceQuestion
               MultipleChoiceQuestion(
@@ -93,8 +84,6 @@ class _TestGridScreenState extends State<TestGridScreen> {
                 },
               ),
 
-              const SizedBox(height: 50),
-
               // 📝 Caja de texto
               CustomTextField(
                 label: "Nombre completo",
@@ -103,8 +92,6 @@ class _TestGridScreenState extends State<TestGridScreen> {
                   debugPrint("Texto ingresado: $value");
                 },
               ),
-
-              
             ],
           ),
         ),

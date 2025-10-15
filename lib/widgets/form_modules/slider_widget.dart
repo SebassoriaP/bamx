@@ -6,6 +6,7 @@ class CustomSlider extends StatefulWidget {
   final double initialValue;
   final String question;
   final ValueChanged<double>? onChanged;
+  final double topPadding;
 
   const CustomSlider({
     super.key,
@@ -14,6 +15,7 @@ class CustomSlider extends StatefulWidget {
     this.max = 100,
     this.initialValue = 50,
     this.onChanged,
+    this.topPadding = 40.0,
   });
 
   @override
@@ -33,19 +35,16 @@ class _CustomSliderState extends State<CustomSlider> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: widget.topPadding),
 
         Padding(
-        padding: const EdgeInsets.only(bottom: 20), 
-        child: Text(
-                widget.question,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  
-                ),
-              ),
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Text(
+            widget.question,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
-        
+
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 20, //Bar size
@@ -55,11 +54,11 @@ class _CustomSliderState extends State<CustomSlider> {
             overlayShape: const RoundSliderOverlayShape(
               overlayRadius: 22, // Slider effect
             ),
-            thumbColor: Color.fromRGBO(255,195,0,1), // Ball color
+            thumbColor: Color.fromRGBO(255, 195, 0, 1), // Ball color
             activeTrackColor: const Color.fromRGBO(116, 185, 228, 1),
             inactiveTrackColor: Colors.deepPurple.shade100,
             overlayColor: Color.fromARGB(241, 255, 213, 75).withValues(),
-            valueIndicatorColor: Colors.deepPurple, 
+            valueIndicatorColor: Colors.deepPurple,
           ),
           child: Slider(
             value: _currentValue,

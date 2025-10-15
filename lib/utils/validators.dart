@@ -14,4 +14,3 @@ bool hasUnsafeCharacters(String input) {
   final unsafePattern = RegExp(r'[<>]|[\u0000-\u001F]');
   return unsafePattern.hasMatch(input);
 }
-

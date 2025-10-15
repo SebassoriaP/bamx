@@ -27,7 +27,10 @@ class LoginForm extends StatelessWidget {
             hintText: "usuario",
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 15,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide.none,
@@ -43,7 +46,10 @@ class LoginForm extends StatelessWidget {
             hintText: "contraseña",
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 15,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide.none,
@@ -51,12 +57,12 @@ class LoginForm extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
-    
+
         ButtonWidget(
-            text: "Iniciar Sesión",
-            color: const Color(0xFFFFC107),
-            textColor: Colors.black,
-            onPressed: onLogin,
+          text: "Iniciar Sesión",
+          color: const Color(0xFFFFC107),
+          textColor: Colors.black,
+          onPressed: onLogin,
         ),
 
         const SizedBox(height: 32),
@@ -65,13 +71,13 @@ class LoginForm extends StatelessWidget {
         Column(
           children: [
             const Text(
-                "No tengo usuario?",
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    fontSize: 16,
-                ),
+              "No tengo usuario?",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+                fontSize: 16,
+              ),
             ),
             TextButton(
               onPressed: onRegister,
