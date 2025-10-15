@@ -98,14 +98,14 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                 },
               )
             : (type == "Slider")
-            ? [
-                {
-                  "nameController": TextEditingController(),
-                  "minValue": 0,
-                  "maxValue": 10,
-                },
-              ]
-            : [],
+                ? [
+                    {
+                      "nameController": TextEditingController(),
+                      "minValue": 0,
+                      "maxValue": 10,
+                    },
+                  ]
+                : [],
         "questions": (type == "Checkbox" || type == "Card Swipe")
             ? [
                 {"controller": TextEditingController()},
@@ -138,12 +138,14 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
   Future<void> _saveFormToFirestore() async {
     final formName = _formTitleController.text.trim();
     if (formName.isEmpty) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Por favor, ingresa un nombre.")),
       );
       return;
     }
     if (_cards.isEmpty) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Agrega al menos un componente antes de guardar."),
@@ -183,17 +185,20 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
 
     try {
       await FirebaseFirestore.instance.collection("forms").add(formData);
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Formulario guardado correctamente!")),
       );
+      if (!mounted) return;
       setState(() {
         _formTitleController.clear();
         _cards.clear();
       });
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error al guardar: $e")));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error al guardar: $e")),
+      );
     }
   }
 
@@ -375,8 +380,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
               Expanded(
                 child: _buildNumberPicker(
                   value: variable["minValue"],
-                  onChanged: (val) =>
-                      setState(() => variable["minValue"] = val),
+                  onChanged: (val) => setState(() => variable["minValue"] = val),
                   label: "Min",
                 ),
               ),
@@ -384,8 +388,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
               Expanded(
                 child: _buildNumberPicker(
                   value: variable["maxValue"],
-                  onChanged: (val) =>
-                      setState(() => variable["maxValue"] = val),
+                  onChanged: (val) => setState(() => variable["maxValue"] = val),
                   label: "Max",
                 ),
               ),
