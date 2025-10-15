@@ -51,8 +51,10 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("📅 Creado: $created",
-                    style: const TextStyle(fontSize: 14)),
+                Text(
+                  "📅 Creado: $created",
+                  style: const TextStyle(fontSize: 14),
+                ),
                 const SizedBox(height: 12),
                 const Text(
                   "Preguntas:",
@@ -81,13 +83,18 @@ class HomeScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("• $qName",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold)),
-                          Text("Tipo: $qType",
-                              style: const TextStyle(fontSize: 13)),
-                          Text("Metadata: $qMetadata",
-                              style: const TextStyle(fontSize: 13)),
+                          Text(
+                            "• $qName",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "Tipo: $qType",
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                          Text(
+                            "Metadata: $qMetadata",
+                            style: const TextStyle(fontSize: 13),
+                          ),
                         ],
                       ),
                     );
@@ -149,8 +156,9 @@ class HomeScreen extends StatelessWidget {
           const Divider(thickness: 1, height: 32),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection('forms').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('forms')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -205,8 +213,10 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const Icon(Icons.info_outline,
-                                color: NokeyColorPalette.white),
+                            const Icon(
+                              Icons.info_outline,
+                              color: NokeyColorPalette.white,
+                            ),
                           ],
                         ),
                       ),
