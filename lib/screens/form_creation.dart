@@ -135,9 +135,19 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
     }
 
     final List<Map<String, dynamic>> questions = _cards.map((card) {
+      dynamic metadata;
+
+      if (card["type"] == "Grid" || card["type"] == "Slider") {
+        metadata = card["variables"];
+      } else if (card["type"] == "Checkbox" || card["type"] == "Card Swipe") {
+        metadata = card["questions"];
+      } else {
+        metadata = {};
+      }
+
       return {
         "type": card["type"],
-        "metadata": card["variables"] ?? card["questions"],
+        "metadata": metadata,
         "name": card["id"],
       };
     }).toList();

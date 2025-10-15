@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bamx/screens/login.dart';
-import 'package:bamx/screens/create_card.dart';
 import 'package:bamx/utils/color_palette.dart';
 import 'package:bamx/widgets/button_widget.dart';
+import 'package:bamx/screens/form_creation.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -224,7 +224,7 @@ class HomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const CreateCardScreen()),
+            MaterialPageRoute(builder: (_) => const FormCreationScreen()),
           );
         },
       ),
