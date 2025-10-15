@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 8),
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: NokeyColorPalette.blueGrey.withOpacity(0.1),
+                        color: NokeyColorPalette.blueGrey,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -194,7 +194,7 @@ class HomeScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black,
                               blurRadius: 4,
                               offset: const Offset(2, 2),
                             ),
