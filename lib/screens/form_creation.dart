@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bamx/utils/color_palette.dart';
 
 final uuid = Uuid();
@@ -88,18 +89,16 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       _cards.add({
         "id": uuid.v4(),
         "type": type,
-        // Initialize variables depending on type
         "variables": (type == "Grid")
             ? [
                 {"name": "", "min": "", "max": ""},
                 {"name": "", "min": "", "max": ""},
               ]
             : (type == "Slider")
-            ? [
-                {"name": "", "min": "", "max": ""},
-              ]
-            : [],
-        // Initialize questions if type needs them
+                ? [
+                    {"name": "", "min": "", "max": ""},
+                  ]
+                : [],
         "questions": (type == "Checkbox" || type == "Card Swipe") ? [""] : [],
       });
     });
@@ -108,17 +107,64 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
   void _removeCard(int index) {
     setState(() {
       final card = _cards[index];
-
-      // Only remove variable names if variables exist and are maps
       final vars = card["variables"];
       if (vars != null && vars is List<Map<String, String>>) {
         for (var v in vars) {
           _usedVariableNames.remove(v["name"]);
         }
       }
-
       _cards.removeAt(index);
     });
+  }
+
+  Future<void> _saveFormToFirestore() async {
+    final formName = _formTitleController.text.trim();
+
+    if (formName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Por favor, ingresa un nombre para el formulario.")),
+      );
+      return;
+    }
+
+    if (_cards.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Agrega al menos un componente antes de guardar.")),
+      );
+      return;
+    }
+
+    final List<Map<String, dynamic>> questions = _cards.map((card) {
+      return {
+        "type": card["type"],
+        "metadata": card["variables"] ?? card["questions"],
+        "name": card["id"],
+      };
+    }).toList();
+
+    final formData = {
+      "admin_id": "/admins/ynTdLLPTJ6uThegM35jX",
+      "created": FieldValue.serverTimestamp(),
+      "form_name": formName,
+      "questions": questions,
+    };
+
+    try {
+      await FirebaseFirestore.instance.collection("forms").add(formData);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Formulario guardado correctamente!")),
+      );
+
+      setState(() {
+        _formTitleController.clear();
+        _cards.clear();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error al guardar: $e")),
+      );
+    }
   }
 
   @override
@@ -141,7 +187,6 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Title input
             TextField(
               controller: _formTitleController,
               decoration: InputDecoration(
@@ -159,7 +204,6 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Card List (reorderable)
             Expanded(
               child: ReorderableColumn(
                 onReorder: (oldIndex, newIndex) {
@@ -181,7 +225,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
 
             const SizedBox(height: 20),
 
-            // Add new card button
+            // Add Card Button
             ElevatedButton.icon(
               onPressed: _addCardDialog,
               icon: const Icon(Icons.add_circle_outline, size: 26),
@@ -192,6 +236,27 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: NokeyColorPalette.yellow,
                 foregroundColor: NokeyColorPalette.black,
+                minimumSize: const Size(double.infinity, 55),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                elevation: 6,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // Save Form Button
+            ElevatedButton.icon(
+              onPressed: _saveFormToFirestore,
+              icon: const Icon(Icons.save_alt, size: 26),
+              label: const Text(
+                "Guardar Formulario",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: NokeyColorPalette.darkBlue,
+                foregroundColor: NokeyColorPalette.white,
                 minimumSize: const Size(double.infinity, 55),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18),
@@ -313,7 +378,6 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
   Widget _buildQuestionFields(Map<String, dynamic> card) {
     card["questions"] ??= [];
 
-    // Always have at least one question to avoid RangeError
     if (card["questions"].isEmpty) card["questions"].add("");
 
     return Column(
