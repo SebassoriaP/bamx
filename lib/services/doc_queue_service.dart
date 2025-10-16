@@ -79,7 +79,11 @@ class DocQueueService {
 
   /// Enqueue without attempting delivery.
   /// You may pass an optional [docId] to target a specific Firestore doc.
-  Future<void> enqueue(Map<String, dynamic> document, String collection, {String? docId}) async {
+  Future<void> enqueue(
+    Map<String, dynamic> document,
+    String collection, {
+    String? docId,
+  }) async {
     final item = QueuedDocument(
       id: const Uuid().v4(),
       docId: (docId != null && docId.isNotEmpty) ? docId : null,
@@ -166,7 +170,10 @@ class DocQueueService {
     final file = File('${dir.path}/queue_documents.json');
     if (!await file.exists()) {
       await file.create(recursive: true);
-      await file.writeAsString(jsonEncode(<Map<String, dynamic>>[]), flush: true);
+      await file.writeAsString(
+        jsonEncode(<Map<String, dynamic>>[]),
+        flush: true,
+      );
     }
     _queueFile = file;
     return file;
@@ -184,7 +191,9 @@ class DocQueueService {
   Future<void> _writeAll(List<QueuedDocument> items) async {
     final file = await _getQueueFile();
     final tmp = File('${file.path}.tmp');
-    final bytes = utf8.encode(jsonEncode(items.map((e) => e.toJson()).toList()));
+    final bytes = utf8.encode(
+      jsonEncode(items.map((e) => e.toJson()).toList()),
+    );
     await tmp.writeAsBytes(bytes, flush: true);
     if (await file.exists()) {
       try {

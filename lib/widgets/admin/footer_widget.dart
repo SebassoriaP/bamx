@@ -4,7 +4,7 @@ import 'package:bamx/utils/color_palette.dart';
 class FooterWidget extends StatelessWidget {
   final VoidCallback onPressed;
 
-  final Color topColor;    // color mitad superior
+  final Color topColor; // color mitad superior
   final Color bottomColor; // color mitad inferior
 
   const FooterWidget({
@@ -31,7 +31,6 @@ class FooterWidget extends StatelessWidget {
               color: bottomColor,
               padding: const EdgeInsets.only(top: 30, bottom: 20),
               width: double.infinity,
-
             ),
           ],
         ),
@@ -46,10 +45,7 @@ class FooterWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 color: NokeyColorPalette.yellow,
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: NokeyColorPalette.blue,
-                  width: 10,
-                ),
+                border: Border.all(color: NokeyColorPalette.blue, width: 10),
               ),
               child: InkWell(
                 customBorder: const CircleBorder(),

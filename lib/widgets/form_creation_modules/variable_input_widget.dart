@@ -21,7 +21,7 @@ class VariableInput extends StatefulWidget {
   });
 
   @override
-  _VariableInputState createState() => _VariableInputState();
+  State<VariableInput> createState() => _VariableInputState();
 }
 
 class _VariableInputState extends State<VariableInput> {

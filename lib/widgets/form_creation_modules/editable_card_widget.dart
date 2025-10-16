@@ -9,11 +9,11 @@ class EditableCard extends StatelessWidget {
   final VoidCallback? onQuestionsUpdated;
 
   const EditableCard({
-    Key? key,
+    super.key,
     required this.card,
     required this.onRemove,
     this.onQuestionsUpdated,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
