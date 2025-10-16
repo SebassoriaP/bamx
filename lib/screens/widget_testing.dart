@@ -84,7 +84,7 @@ class _TestGridScreenState extends State<TestGridScreen> {
                 },
               ),
 
-              // 📝 Caja de texto
+              //  Caja de texto
               CustomTextField(
                 label: "Nombre completo",
                 hint: "Ingresa tu nombre",
