@@ -5,11 +5,14 @@ import 'package:bamx/utils/color_palette.dart';
 class LoginFooter extends StatelessWidget {
   final VoidCallback onTestWidgets;
   final VoidCallback onTestFormCreation;
+  final VoidCallback onAdmin;
 
   const LoginFooter({
     super.key,
     required this.onTestWidgets,
     required this.onTestFormCreation,
+    required this.onAdmin,
+    
   });
 
   @override
@@ -32,6 +35,17 @@ class LoginFooter extends StatelessWidget {
           color: NokeyColorPalette.salmon,
           onPressed: onTestFormCreation,
         ),
+
+        const SizedBox(height: 12),
+
+        ButtonWidget(
+          text: "Try Out Forms Admin",
+          textColor: NokeyColorPalette.black,
+          color: const Color.fromARGB(255, 107, 253, 70),
+          onPressed: onAdmin,
+        ),
+
+
       ],
     );
   }

@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.bamx"
-    compileSdk = 34 // O flutter.compileSdkVersion si quieres automático
+    compileSdk = 36 // O flutter.compileSdkVersion si quieres automático
 
     defaultConfig {
         applicationId = "com.example.bamx"
