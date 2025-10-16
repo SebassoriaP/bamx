@@ -101,14 +101,14 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                 },
               )
             : (type == "Slider")
-                ? [
-                    {
-                      "nameController": TextEditingController(),
-                      "minValue": 0,
-                      "maxValue": 10,
-                    },
-                  ]
-                : [],
+            ? [
+                {
+                  "nameController": TextEditingController(),
+                  "minValue": 0,
+                  "maxValue": 10,
+                },
+              ]
+            : [],
         "questions": (type == "Checkbox" || type == "Card Swipe")
             ? [
                 {"controller": TextEditingController()},
@@ -198,9 +198,9 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       });
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error al guardar: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error al guardar: $e")));
     }
   }
 

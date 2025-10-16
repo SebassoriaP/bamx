@@ -69,9 +69,12 @@ class _VariableInputState extends State<VariableInput> {
                       child: TextField(
                         textAlign: TextAlign.center,
                         readOnly: true,
-                        controller:
-                            TextEditingController(text: minValue.toString()),
-                        decoration: const InputDecoration(border: OutlineInputBorder()),
+                        controller: TextEditingController(
+                          text: minValue.toString(),
+                        ),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
                     IconButton(
@@ -107,9 +110,12 @@ class _VariableInputState extends State<VariableInput> {
                       child: TextField(
                         textAlign: TextAlign.center,
                         readOnly: true,
-                        controller:
-                            TextEditingController(text: maxValue.toString()),
-                        decoration: const InputDecoration(border: OutlineInputBorder()),
+                        controller: TextEditingController(
+                          text: maxValue.toString(),
+                        ),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
                     IconButton(

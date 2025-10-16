@@ -88,17 +88,16 @@ class EditableCard extends StatelessWidget {
                       max: 100,
                       currentMin: card["variables"][0]["minValue"],
                       currentMax: card["variables"][0]["maxValue"],
-                      onMinChanged: (v) =>
-                          card["variables"][0]["minValue"] = v,
-                      onMaxChanged: (v) =>
-                          card["variables"][0]["maxValue"] = v,
+                      onMinChanged: (v) => card["variables"][0]["minValue"] = v,
+                      onMaxChanged: (v) => card["variables"][0]["maxValue"] = v,
                     ),
                   if (type == "Checkbox" || type == "Card Swipe")
                     QuestionList(
                       questions: card["questions"],
                       addQuestion: () {
-                        card["questions"]
-                            .add({"controller": TextEditingController()});
+                        card["questions"].add({
+                          "controller": TextEditingController(),
+                        });
                         // Trigger UI update
                         if (onQuestionsUpdated != null) onQuestionsUpdated!();
                       },
