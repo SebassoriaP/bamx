@@ -5,6 +5,7 @@ import 'package:bamx/screens/login.dart';
 import 'package:bamx/utils/color_palette.dart';
 import 'package:bamx/widgets/button_widget.dart';
 import 'package:bamx/screens/form_creation.dart';
+import 'package:bamx/screens/form_render.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -179,24 +180,25 @@ class HomeScreen extends StatelessWidget {
                     final color = NokeyColorPalette.green;
 
                     return GestureDetector(
-                      onTap: () => _showFormDetailsDialog(context, data),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => FormRenderScreen(formData: data),
+                          ),
+                        );
+                      },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 20,
-                        ),
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                         decoration: BoxDecoration(
                           color: color,
                           borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black,
                               blurRadius: 4,
-                              offset: const Offset(2, 2),
+                              offset: Offset(2, 2),
                             ),
                           ],
                         ),
@@ -214,7 +216,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ),
                             const Icon(
-                              Icons.info_outline,
+                              Icons.arrow_forward_ios,
                               color: NokeyColorPalette.white,
                             ),
                           ],
