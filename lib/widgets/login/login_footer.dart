@@ -12,7 +12,6 @@ class LoginFooter extends StatelessWidget {
     required this.onTestWidgets,
     required this.onTestFormCreation,
     required this.onAdmin,
-    
   });
 
   @override
@@ -44,8 +43,6 @@ class LoginFooter extends StatelessWidget {
           color: const Color.fromARGB(255, 107, 253, 70),
           onPressed: onAdmin,
         ),
-
-
       ],
     );
   }
