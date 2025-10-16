@@ -7,8 +7,6 @@ import 'package:bamx/utils/color_palette.dart';
 
 import 'package:bamx/widgets/form_creation_modules/card_option_widget.dart';
 import 'package:bamx/widgets/form_creation_modules/editable_card_widget.dart';
-import 'package:bamx/widgets/form_creation_modules/variable_input_widget.dart';
-import 'package:bamx/widgets/form_creation_modules/question_list_widget.dart';
 
 final uuid = Uuid();
 
