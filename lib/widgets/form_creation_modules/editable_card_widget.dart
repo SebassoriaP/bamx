@@ -7,12 +7,14 @@ class EditableCard extends StatelessWidget {
   final Map<String, dynamic> card;
   final VoidCallback onRemove;
   final VoidCallback? onQuestionsUpdated;
+  final bool showNameField;
 
   const EditableCard({
     super.key,
     required this.card,
     required this.onRemove,
     this.onQuestionsUpdated,
+    this.showNameField = false,
   });
 
   @override
@@ -57,6 +59,25 @@ class EditableCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
+
+            TextField(
+              controller: card["nameController"],
+              decoration: InputDecoration(
+                labelText: "$type Name",
+                labelStyle: const TextStyle(
+                  color: NokeyColorPalette.black,
+                  fontWeight: FontWeight.w300,
+                ),
+                filled: true,
+                fillColor: NokeyColorPalette.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
             // Content container
             Container(
               padding: const EdgeInsets.all(12),
@@ -71,8 +92,8 @@ class EditableCard extends StatelessWidget {
                       (card["variables"] as List).length,
                       (i) => VariableInput(
                         controller: card["variables"][i]["nameController"],
-                        min: 0, // allowed min
-                        max: 100, // allowed max
+                        min: 0,
+                        max: 100,
                         currentMin: card["variables"][i]["minValue"],
                         currentMax: card["variables"][i]["maxValue"],
                         onMinChanged: (v) =>
@@ -98,7 +119,6 @@ class EditableCard extends StatelessWidget {
                         card["questions"].add({
                           "controller": TextEditingController(),
                         });
-                        // Trigger UI update
                         if (onQuestionsUpdated != null) onQuestionsUpdated!();
                       },
                     ),

@@ -70,7 +70,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       metadataMap = Map<String, dynamic>.from(rawMetadata);
     } else if (rawMetadata is List) {
       if (rawMetadata.isNotEmpty && rawMetadata.first is Map) {
-        metadataList = rawMetadata.map((e) => Map<String, dynamic>.from(e)).toList();
+        metadataList = rawMetadata
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
       } else if (rawMetadata.isNotEmpty && rawMetadata.first is String) {
         metadataStrings = List<String>.from(rawMetadata);
       }
@@ -81,7 +83,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           metadataMap = Map<String, dynamic>.from(decoded);
         } else if (decoded is List) {
           if (decoded.isNotEmpty && decoded.first is Map) {
-            metadataList = decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+            metadataList = decoded
+                .map((e) => Map<String, dynamic>.from(e))
+                .toList();
           } else if (decoded.isNotEmpty && decoded.first is String) {
             metadataStrings = List<String>.from(decoded);
           }
@@ -100,9 +104,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
             child: InteractiveGrid(
               width: 300,
               height: 300,
-              onChanged: (x, y) {
-
-              },
+              onChanged: (x, y) {},
             ),
           ),
         );
@@ -129,7 +131,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       case 'Checkbox':
         List<String> options = [];
         if (metadataList.isNotEmpty) {
-          options = metadataList.map((e) => e['name']?.toString() ?? '').toList();
+          options = metadataList
+              .map((e) => e['name']?.toString() ?? '')
+              .toList();
         } else if (metadataStrings.isNotEmpty) {
           options = metadataStrings;
         } else if (metadataMap.containsKey('options')) {
@@ -139,8 +143,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
         return MultipleChoiceQuestion(
           question: name,
           options: options,
-          onChanged: (selected) {
-          },
+          onChanged: (selected) {},
         );
 
       case 'Card Swipe':
@@ -157,9 +160,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           height: 400,
           title: name,
           questions: cards.isNotEmpty ? cards : ['Error: sin cards'],
-          onAnswered: (question, answer) {
-
-          },
+          onAnswered: (question, answer) {},
         );
 
       case 'Textbox':

@@ -4,7 +4,6 @@ import 'package:reorderables/reorderables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:bamx/utils/color_palette.dart';
-
 import 'package:bamx/widgets/form_creation_modules/card_option_widget.dart';
 import 'package:bamx/widgets/form_creation_modules/editable_card_widget.dart';
 
@@ -89,6 +88,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       _cards.add({
         "id": uuid.v4(),
         "type": type,
+        "nameController": TextEditingController(), // 👈 Card Name field
         "variables": (type == "Grid")
             ? List.generate(
                 2,
@@ -119,6 +119,8 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
   void _removeCard(int index) {
     final card = _cards[index];
 
+    // Dispose controllers
+    card["nameController"]?.dispose();
     if (card["variables"] != null) {
       for (var v in List<Map<String, dynamic>>.from(card["variables"])) {
         v["nameController"]?.dispose();
@@ -173,7 +175,13 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       } else {
         metadata = {};
       }
-      return {"type": card["type"], "metadata": metadata, "id": card["id"]};
+
+      return {
+        "id": card["id"],
+        "type": card["type"],
+        "name": card["nameController"]?.text ?? "", // 👈 Save card name
+        "metadata": metadata,
+      };
     }).toList();
 
     final formData = {
@@ -252,6 +260,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                     card: _cards[i],
                     onRemove: () => _removeCard(i),
                     onQuestionsUpdated: () => setState(() {}),
+                    showNameField: true, // 👈 enable name field rendering
                   ),
                 ),
               ),
