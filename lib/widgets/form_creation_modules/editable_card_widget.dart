@@ -63,7 +63,7 @@ class EditableCard extends StatelessWidget {
             TextField(
               controller: card["nameController"],
               decoration: InputDecoration(
-                labelText: "${type} Name",
+                labelText: "$type Name",
                 labelStyle: const TextStyle(
                   color: NokeyColorPalette.black,
                   fontWeight: FontWeight.w300,

@@ -93,20 +93,20 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
             ? List.generate(
                 2,
                 (_) => {
-                      "nameController": TextEditingController(),
-                      "minValue": 0,
-                      "maxValue": 10,
-                    },
+                  "nameController": TextEditingController(),
+                  "minValue": 0,
+                  "maxValue": 10,
+                },
               )
             : (type == "Slider")
-                ? [
-                    {
-                      "nameController": TextEditingController(),
-                      "minValue": 0,
-                      "maxValue": 10,
-                    },
-                  ]
-                : [],
+            ? [
+                {
+                  "nameController": TextEditingController(),
+                  "minValue": 0,
+                  "maxValue": 10,
+                },
+              ]
+            : [],
         "questions": (type == "Checkbox" || type == "Card Swipe")
             ? [
                 {"controller": TextEditingController()},
