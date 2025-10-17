@@ -16,9 +16,7 @@ class CustomSlider extends StatefulWidget {
     double? initialValue, // optional
     this.onChanged,
     this.topPadding = 40.0,
-  }) : initialValue = initialValue != null
-            ? initialValue.clamp(min, max)
-            : min;
+  }) : initialValue = initialValue != null ? initialValue.clamp(min, max) : min;
 
   @override
   State<CustomSlider> createState() => _CustomSliderState();
