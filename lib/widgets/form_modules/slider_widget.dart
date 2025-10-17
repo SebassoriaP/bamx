@@ -8,15 +8,17 @@ class CustomSlider extends StatefulWidget {
   final ValueChanged<double>? onChanged;
   final double topPadding;
 
-  const CustomSlider({
+  CustomSlider({
     super.key,
     required this.question,
     this.min = 0,
     this.max = 100,
-    this.initialValue = 50,
+    double? initialValue, // optional
     this.onChanged,
     this.topPadding = 40.0,
-  });
+  }) : initialValue = initialValue != null
+            ? initialValue.clamp(min, max)
+            : min;
 
   @override
   State<CustomSlider> createState() => _CustomSliderState();

@@ -91,10 +91,6 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       }
     }
 
-    // 🔹 Depuración: imprimir todo tipo de metadata
-    const encoder = JsonEncoder.withIndent('  ');
-    debugPrint('🧾 [$name] tipo: $type\nmetadataMap:\n${encoder.convert(metadataMap)}\nmetadataList:\n${encoder.convert(metadataList)}\nmetadataStrings:\n${encoder.convert(metadataStrings)}');
-
     switch (type) {
       case 'Grid':
         return Padding(
@@ -105,7 +101,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
               width: 300,
               height: 300,
               onChanged: (x, y) {
-                debugPrint('[$name] → X: $x, Y: $y');
+
               },
             ),
           ),
@@ -127,7 +123,6 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           initialValue: _sliderValue,
           onChanged: (value) {
             setState(() => _sliderValue = value);
-            debugPrint('[$name] → Valor del slider: $value');
           },
         );
 
@@ -145,7 +140,6 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           question: name,
           options: options,
           onChanged: (selected) {
-            debugPrint('[$name] → Seleccionados: $selected');
           },
         );
 
@@ -164,7 +158,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           title: name,
           questions: cards.isNotEmpty ? cards : ['Error: sin cards'],
           onAnswered: (question, answer) {
-            debugPrint('[$name] "$question" → ${answer ? "Sí" : "No"}');
+
           },
         );
 
@@ -172,7 +166,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
         return CustomTextField(
           label: name,
           hint: metadataMap['hint']?.toString() ?? "Escribe aquí...",
-          onChanged: (value) => debugPrint('[$name] → Texto: $value'),
+          onChanged: (value) => {},
         );
 
       default:
