@@ -14,4 +14,5 @@ class NokeyColorPalette {
   static const Color darkGreen = Color(0xFF007B97);
   static const Color lightGreen = Color(0xFFC5FFC7);
   static const Color lightYellow = Color(0xFFFFEB99);
+  static const Color lightBlue = Color(0xFFE5F6FF);
 }
