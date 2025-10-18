@@ -91,78 +91,87 @@ class _InteractiveGridState extends State<InteractiveGrid> {
             ),
 
             // Grid
-            LayoutBuilder(builder: (context, constraints) {
-              final width = widget.width;
-              final height = widget.height;
-              if (dotPosition == Offset.zero) {
-                dotPosition = Offset(width / 2, height / 2);
-              }
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final width = widget.width;
+                final height = widget.height;
+                if (dotPosition == Offset.zero) {
+                  dotPosition = Offset(width / 2, height / 2);
+                }
 
-              return GestureDetector(
-                onPanStart: (d) =>
-                    _updatePosition(d.localPosition, Size(width, height)),
-                onPanUpdate: (d) =>
-                    _updatePosition(d.localPosition, Size(width, height)),
-                child: Stack(
-                  children: [
-                    SizedBox(
-                      width: width,
-                      height: height,
-                      child: CustomPaint(
-                        painter: _GridPainter(
-                          dotPosition,
-                          xLabel: widget.xLabel,
-                          yLabel: widget.yLabel,
+                return GestureDetector(
+                  onPanStart: (d) =>
+                      _updatePosition(d.localPosition, Size(width, height)),
+                  onPanUpdate: (d) =>
+                      _updatePosition(d.localPosition, Size(width, height)),
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: width,
+                        height: height,
+                        child: CustomPaint(
+                          painter: _GridPainter(
+                            dotPosition,
+                            xLabel: widget.xLabel,
+                            yLabel: widget.yLabel,
+                          ),
                         ),
                       ),
-                    ),
 
-                    // Dynamic label
-                    Builder(builder: (_) {
-                      const labelPadding = 20.0;
-                      const labelWidth = 100.0;
-                      const labelHeight = 32.0;
+                      // Dynamic label
+                      Builder(
+                        builder: (_) {
+                          const labelPadding = 20.0;
+                          const labelWidth = 100.0;
+                          const labelHeight = 32.0;
 
-                      double left = dotPosition.dx + labelPadding;
-                      double top = dotPosition.dy - labelHeight / 2;
+                          double left = dotPosition.dx + labelPadding;
+                          double top = dotPosition.dy - labelHeight / 2;
 
-                      if (left + labelWidth > width) {
-                        left = dotPosition.dx - labelWidth - labelPadding;
-                      }
+                          if (left + labelWidth > width) {
+                            left = dotPosition.dx - labelWidth - labelPadding;
+                          }
 
-                      if (top < 0) top = 0;
-                      if (top + labelHeight > height) top = height - labelHeight;
+                          if (top < 0){
+                            top = 0;
+                          }
 
-                      return Positioned(
-                        left: left,
-                        top: top,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${widget.yLabel} = ${_mapToValue(dotPosition.dy, height, widget.yMin, widget.yMax, isY: true).toStringAsFixed(1)}',
-                              style: const TextStyle(
-                                color: NokeyColorPalette.purple,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
+                          if (top + labelHeight > height){
+                            top = height - labelHeight;
+                          }
+
+                          return Positioned(
+                            left: left,
+                            top: top,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${widget.yLabel} = ${_mapToValue(dotPosition.dy, height, widget.yMin, widget.yMax, isY: true).toStringAsFixed(1)}',
+                                  style: const TextStyle(
+                                    color: NokeyColorPalette.purple,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                Text(
+                                  '${widget.xLabel} = ${_mapToValue(dotPosition.dx, width, widget.xMin, widget.xMax, isY: false).toStringAsFixed(1)}',
+                                  style: const TextStyle(
+                                    color: NokeyColorPalette.purple,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              '${widget.xLabel} = ${_mapToValue(dotPosition.dx, width, widget.xMin, widget.xMax, isY: false).toStringAsFixed(1)}',
-                              style: const TextStyle(
-                                color: NokeyColorPalette.purple,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              );
-            }),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -212,12 +221,14 @@ class _GridPainter extends CustomPainter {
       ..strokeWidth = 3;
 
     // X and Y axes
-    canvas.drawLine(Offset(0, size.height), Offset(size.width, size.height),
-        axisPaint);
+    canvas.drawLine(
+      Offset(0, size.height),
+      Offset(size.width, size.height),
+      axisPaint,
+    );
     canvas.drawLine(Offset(0, 0), Offset(0, size.height), axisPaint);
 
-    final drawText =
-        (String text, Offset offset, {Color color = NokeyColorPalette.blue}) {
+    void drawText(String text, Offset offset, {Color color = NokeyColorPalette.blue}) {
       final tp = TextPainter(
         text: TextSpan(
           text: text,
@@ -231,9 +242,8 @@ class _GridPainter extends CustomPainter {
       );
       tp.layout();
       tp.paint(canvas, offset);
-    };
+    }
 
-    // Axis labels
     drawText(xLabel, Offset(size.width / 2 - 20, size.height + 8));
 
     final yLabelChars = yLabel.split('');

@@ -97,7 +97,6 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
 
     switch (type) {
       case 'Grid':
-
         double minx = metadataList.isNotEmpty
             ? double.tryParse(metadataList[0]['min'].toString()) ?? 0
             : 0;
