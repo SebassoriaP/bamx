@@ -6,6 +6,7 @@ import 'package:bamx/screens/sign_up.dart';
 import 'package:bamx/screens/widget_testing.dart';
 import 'package:bamx/screens/form_creation.dart';
 import 'package:bamx/utils/color_palette.dart';
+import 'package:bamx/screens/admin/admin.dart';
 
 import 'package:bamx/widgets/login/login_form.dart';
 import 'package:bamx/widgets/login/login_footer.dart';
@@ -163,6 +164,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
+
+                        onAdmin: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const AdminPanel(),
+                            ),
+                          );
+                        },                
+
                       ),
                       const SizedBox(height: 20),
                     ],

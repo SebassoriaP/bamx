@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:reorderables/reorderables.dart';
 import 'package:uuid/uuid.dart';
+import 'package:reorderables/reorderables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:bamx/utils/color_palette.dart';
+import 'package:bamx/widgets/form_creation_modules/card_option_widget.dart';
+import 'package:bamx/widgets/form_creation_modules/editable_card_widget.dart';
 
 final uuid = Uuid();
 
@@ -24,60 +27,57 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
-      builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            children: [
-              const Text(
-                "Add a new component",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                  color: NokeyColorPalette.darkBlue,
-                ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: [
+            const Text(
+              "Add a new component",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                color: NokeyColorPalette.darkBlue,
               ),
-              const SizedBox(height: 20),
-              _buildCardOption("Grid", Icons.grid_view, NokeyColorPalette.blue),
-              _buildCardOption("Slider", Icons.tune, NokeyColorPalette.yellow),
-              _buildCardOption(
-                "Checkbox",
-                Icons.check_box,
-                NokeyColorPalette.purple,
-              ),
-              _buildCardOption(
-                "Card Swipe",
-                Icons.swipe,
-                NokeyColorPalette.darkBlue,
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildCardOption(String type, IconData icon, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color,
-          foregroundColor: NokeyColorPalette.white,
-          minimumSize: const Size(260, 50),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-        ),
-        onPressed: () {
-          Navigator.pop(context);
-          _addInlineCard(type);
-        },
-        icon: Icon(icon, size: 24),
-        label: Text(
-          type,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 20),
+            CardOptionButton(
+              type: "Grid",
+              icon: Icons.grid_view,
+              color: NokeyColorPalette.blue,
+              onTap: () {
+                Navigator.pop(context);
+                _addInlineCard("Grid");
+              },
+            ),
+            CardOptionButton(
+              type: "Slider",
+              icon: Icons.tune,
+              color: NokeyColorPalette.yellow,
+              onTap: () {
+                Navigator.pop(context);
+                _addInlineCard("Slider");
+              },
+            ),
+            CardOptionButton(
+              type: "Checkbox",
+              icon: Icons.check_box,
+              color: NokeyColorPalette.purple,
+              onTap: () {
+                Navigator.pop(context);
+                _addInlineCard("Checkbox");
+              },
+            ),
+            CardOptionButton(
+              type: "Card Swipe",
+              icon: Icons.swipe,
+              color: NokeyColorPalette.darkBlue,
+              onTap: () {
+                Navigator.pop(context);
+                _addInlineCard("Card Swipe");
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -88,6 +88,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       _cards.add({
         "id": uuid.v4(),
         "type": type,
+        "nameController": TextEditingController(), // 👈 Card Name field
         "variables": (type == "Grid")
             ? List.generate(
                 2,
@@ -98,14 +99,14 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                 },
               )
             : (type == "Slider")
-                ? [
-                    {
-                      "nameController": TextEditingController(),
-                      "minValue": 0,
-                      "maxValue": 10,
-                    },
-                  ]
-                : [],
+            ? [
+                {
+                  "nameController": TextEditingController(),
+                  "minValue": 0,
+                  "maxValue": 10,
+                },
+              ]
+            : [],
         "questions": (type == "Checkbox" || type == "Card Swipe")
             ? [
                 {"controller": TextEditingController()},
@@ -119,6 +120,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
     final card = _cards[index];
 
     // Dispose controllers
+    card["nameController"]?.dispose();
     if (card["variables"] != null) {
       for (var v in List<Map<String, dynamic>>.from(card["variables"])) {
         v["nameController"]?.dispose();
@@ -173,7 +175,13 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       } else {
         metadata = {};
       }
-      return {"type": card["type"], "metadata": metadata, "id": card["id"]};
+
+      return {
+        "id": card["id"],
+        "type": card["type"],
+        "name": card["nameController"]?.text ?? "", // 👈 Save card name
+        "metadata": metadata,
+      };
     }).toList();
 
     final formData = {
@@ -196,9 +204,9 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       });
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error al guardar: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error al guardar: $e")));
     }
   }
 
@@ -247,7 +255,13 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                 },
                 children: List.generate(
                   _cards.length,
-                  (i) => _buildEditableCard(_cards[i], i),
+                  (i) => EditableCard(
+                    key: ValueKey(_cards[i]["id"]),
+                    card: _cards[i],
+                    onRemove: () => _removeCard(i),
+                    onQuestionsUpdated: () => setState(() {}),
+                    showNameField: true, // 👈 enable name field rendering
+                  ),
                 ),
               ),
             ),
@@ -282,188 +296,6 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildEditableCard(Map<String, dynamic> card, int index) {
-    final type = card["type"] as String;
-    final colorMap = {
-      "Grid": NokeyColorPalette.blue,
-      "Slider": NokeyColorPalette.yellow,
-      "Checkbox": NokeyColorPalette.purple,
-      "Card Swipe": NokeyColorPalette.blueGrey,
-    };
-
-    return Card(
-      key: ValueKey(card["id"]),
-      elevation: 6,
-      color: colorMap[type],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  type,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: NokeyColorPalette.white,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.delete,
-                    color: NokeyColorPalette.mexicanPink,
-                  ),
-                  onPressed: () => _removeCard(index),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: NokeyColorPalette.white,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-                  if (type == "Grid") _buildGridFields(card),
-                  if (type == "Slider") _buildSliderFields(card),
-                  if (type == "Checkbox" || type == "Card Swipe")
-                    _buildQuestionFields(card),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGridFields(Map<String, dynamic> card) {
-    final variables = card["variables"] as List<dynamic>;
-    return Column(
-      children: List.generate(
-        variables.length,
-        (i) => _buildVariableInput(variables[i] as Map<String, dynamic>),
-      ),
-    );
-  }
-
-  Widget _buildSliderFields(Map<String, dynamic> card) {
-    final variable =
-        (card["variables"] as List<dynamic>)[0] as Map<String, dynamic>;
-    return _buildVariableInput(variable);
-  }
-
-  Widget _buildVariableInput(Map<String, dynamic> variable) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Column(
-        children: [
-          TextField(
-            controller: variable["nameController"],
-            decoration: const InputDecoration(
-              labelText: "Variable Name",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              Expanded(
-                child: _buildNumberPicker(
-                  value: variable["minValue"],
-                  onChanged: (val) => setState(() => variable["minValue"] = val),
-                  label: "Min",
-                ),
-              ),
-              const SizedBox(width: 6),
-              Expanded(
-                child: _buildNumberPicker(
-                  value: variable["maxValue"],
-                  onChanged: (val) => setState(() => variable["maxValue"] = val),
-                  label: "Max",
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNumberPicker({
-    required int value,
-    required Function(int) onChanged,
-    required String label,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label),
-        const SizedBox(height: 4),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.remove),
-                onPressed: () => onChanged(value - 1),
-              ),
-              Expanded(
-                child: Center(
-                  child: Text("$value", style: const TextStyle(fontSize: 16)),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () => onChanged(value + 1),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQuestionFields(Map<String, dynamic> card) {
-    final questions = card["questions"] as List<dynamic>;
-    return Column(
-      children: [
-        for (int i = 0; i < questions.length; i++)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            child: TextField(
-              controller: questions[i]["controller"],
-              decoration: InputDecoration(
-                labelText: "Question ${i + 1}",
-                border: const OutlineInputBorder(),
-              ),
-            ),
-          ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton.icon(
-            onPressed: () {
-              setState(() {
-                questions.add({"controller": TextEditingController()});
-              });
-            },
-            icon: const Icon(Icons.add_circle_outline),
-            label: const Text("Add Question"),
-          ),
-        ),
-      ],
     );
   }
 }
