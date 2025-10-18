@@ -7,6 +7,7 @@ class LoginFooter extends StatelessWidget {
   final VoidCallback onTestFormCreation;
   final VoidCallback onAdmin;
 
+
   const LoginFooter({
     super.key,
     required this.onTestWidgets,
@@ -38,11 +39,12 @@ class LoginFooter extends StatelessWidget {
         const SizedBox(height: 12),
 
         ButtonWidget(
-          text: "Try Out Forms Admin",
+          text: "Admin",
           textColor: NokeyColorPalette.black,
-          color: const Color.fromARGB(255, 107, 253, 70),
+          color: const Color.fromARGB(255, 158, 255, 133),
           onPressed: onAdmin,
         ),
+
       ],
     );
   }

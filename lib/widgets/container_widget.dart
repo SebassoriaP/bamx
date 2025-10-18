@@ -8,6 +8,7 @@ class FlexibleContainer extends StatelessWidget {
 
   final Color? color;
   final double borderRadius;
+  final EdgeInsetsGeometry? padding; 
 
   const FlexibleContainer({
     super.key,
@@ -16,6 +17,8 @@ class FlexibleContainer extends StatelessWidget {
     this.overlays,
     this.color,
     this.borderRadius = 30,
+    this.padding, 
+
   });
 
   @override
