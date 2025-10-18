@@ -97,16 +97,38 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
 
     switch (type) {
       case 'Grid':
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: SizedBox(
-            height: 300,
-            child: InteractiveGrid(
-              width: 300,
-              height: 300,
-              onChanged: (x, y) {},
-            ),
-          ),
+
+        double minx = metadataList.isNotEmpty
+            ? double.tryParse(metadataList[0]['min'].toString()) ?? 0
+            : 0;
+        double maxx = metadataList.isNotEmpty
+            ? double.tryParse(metadataList[0]['max'].toString()) ?? 100
+            : 100;
+        String namex = metadataList.isNotEmpty
+            ? metadataList[0]['name'].toString()
+            : 'no name';
+
+        double miny = metadataList.length > 1
+            ? double.tryParse(metadataList[1]['min'].toString()) ?? 0
+            : 0;
+        double maxy = metadataList.length > 1
+            ? double.tryParse(metadataList[1]['max'].toString()) ?? 100
+            : 100;
+        String namey = metadataList.length > 1
+            ? metadataList[1]['name'].toString()
+            : 'no name';
+
+        return InteractiveGrid(
+          title: name,
+          xLabel: namex,
+          yLabel: namey,
+          xMin: minx,
+          xMax: maxx,
+          yMin: miny,
+          yMax: maxy,
+          width: 300,
+          height: 300,
+          onChanged: (x, y) {},
         );
 
       case 'Slider':
