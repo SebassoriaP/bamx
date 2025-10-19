@@ -50,49 +50,101 @@ class _FormResultsScreenState extends State<FormResultsScreen> {
     }
 
     List<Widget> widgets = [];
+
     responseData!.forEach((key, value) {
       widgets.add(
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Card(
-            color: NokeyColorPalette.blueGrey,
+            color: NokeyColorPalette.lightBlue,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
+            elevation: 3,
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // 
                   Text(
                     key,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: NokeyColorPalette.black,
+                      fontSize: 23,
+                      color: NokeyColorPalette.blue,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
+
                   if (value is Map)
-                    ...value.entries.map((entry) => Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ...value.entries.map(
+                      (entry) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Left variable
                             Text(
                               entry.key,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            Text(
-                              entry.value.toString(),
                               style: const TextStyle(
+                                fontSize: 16,
+                                color: NokeyColorPalette.darkGreen,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            // Answer
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: NokeyColorPalette.blue,
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Text(
+                                entry.value.toString(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 16,
                                   color: NokeyColorPalette.black,
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ],
-                        )),
+                        ),
+                      ),
+                    ),
                   if (value is! Map)
-                    Text(
-                      value.toString(),
-                      style: const TextStyle(fontSize: 16),
+                    Container(
+                      margin: const EdgeInsets.only(top: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 12),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: NokeyColorPalette.blue,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Text(
+                        value.toString(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: NokeyColorPalette.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                 ],
               ),
@@ -102,29 +154,31 @@ class _FormResultsScreenState extends State<FormResultsScreen> {
       );
     });
 
-    return Column(children: widgets);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: widgets,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: NokeyColorPalette.white, // Arrow back - color
+        iconTheme: const IconThemeData(
+          color: NokeyColorPalette.white,
         ),
-        
         title: Text(
           'RESULTADOS DE: $userName',
-          style: TextStyle(
+          style: const TextStyle(
             color: NokeyColorPalette.white,
-            fontWeight: FontWeight.bold
-          )  
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: NokeyColorPalette.blue,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: SafeArea(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
           child: _buildResponseWidget(),
         ),
       ),
