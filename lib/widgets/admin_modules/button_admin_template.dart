@@ -67,6 +67,9 @@ class ButtonWidget extends StatelessWidget {
             color: NokeyColorPalette.blue,
           ),
         ),
+
+        const SizedBox(height: 10),
+
       ],
     );
   }
