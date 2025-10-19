@@ -40,12 +40,7 @@ class _AdminPanelState extends State<AdminPanel> {
             ],
           ),
         ),
-        body: const TabBarView(
-          children: [
-            AdminReports(),
-            AdminTemplates(),
-          ],
-        ),
+        body: const TabBarView(children: [AdminReports(), AdminTemplates()]),
       ),
     );
   }

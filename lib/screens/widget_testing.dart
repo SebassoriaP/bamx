@@ -35,15 +35,19 @@ class _TestGridScreenState extends State<TestGridScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              InteractiveGrid(
+                title: "no title for now",
+                xLabel: "x",
+                yLabel: "yyyyy",
+                xMin: 0,
+                xMax: 10,
+                yMin: 0,
+                yMax: 10,
+                width: 300,
                 height: 300,
-                child: InteractiveGrid(
-                  width: 300,
-                  height: 300,
-                  onChanged: (x, y) {
-                    debugPrint('Selected values → X: $x, Y: $y');
-                  },
-                ),
+                onChanged: (x, y) {
+                  debugPrint('Selected values → X: $x, Y: $y');
+                },
               ),
 
               CustomSlider(

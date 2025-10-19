@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bamx/utils/color_palette.dart';
 import 'package:bamx/widgets/form_modules/grid_widget.dart';
 import 'package:bamx/widgets/form_modules/slider_widget.dart';
 import 'package:bamx/widgets/form_modules/card_widget.dart';
 import 'package:bamx/widgets/form_modules/checkbox_widget.dart';
 import 'package:bamx/widgets/form_modules/textbox_widget.dart';
+import 'package:bamx/screens/home.dart';
 
 class FormRenderScreen extends StatefulWidget {
   final Map<String, dynamic> formData;
@@ -17,14 +19,14 @@ class FormRenderScreen extends StatefulWidget {
 }
 
 class _FormRenderScreenState extends State<FormRenderScreen> {
-  double _sliderValue = 50;
+  final Map<String, dynamic> _responses = {};
 
   @override
   Widget build(BuildContext context) {
     final formName = widget.formData['form_name'] ?? 'Formulario sin nombre';
+    final formId = widget.formData['id'] ?? 'unknown_form_id';
     final questionsRaw = widget.formData['questions'];
 
-    // Normalizamos el formato de questions
     List<Map<String, dynamic>> questions = [];
     if (questionsRaw is List) {
       questions = List<Map<String, dynamic>>.from(questionsRaw);
@@ -38,11 +40,10 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
 
     return Scaffold(
       appBar: AppBar(
-
         iconTheme: IconThemeData(
           color: NokeyColorPalette.white, // Arrow back - color
         ),
-        
+
         backgroundColor: NokeyColorPalette.blue,
         title: Text(
           formName,
@@ -55,7 +56,30 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
-          children: [for (final q in questions) _buildComponentForQuestion(q)],
+          children: [
+            for (final q in questions) _buildComponentForQuestion(q),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: NokeyColorPalette.blue,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 16,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: () async {
+                await _submitForm(formId);
+              },
+              child: const Text(
+                "Enviar respuestas",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -66,7 +90,6 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
     final name = question['name'] ?? 'Pregunta sin nombre';
     final rawMetadata = question['metadata'];
 
-    // 🔹 Preparar variables para diferentes tipos de metadata
     Map<String, dynamic> metadataMap = {};
     List<Map<String, dynamic>> metadataList = [];
     List<String> metadataStrings = [];
@@ -96,22 +119,48 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           }
         }
       } catch (e) {
-        debugPrint('⚠️ Error parsing metadata JSON: $e');
+        debugPrint('Error parsing metadata JSON: $e');
       }
     }
 
     switch (type) {
       case 'Grid':
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: SizedBox(
-            height: 300,
-            child: InteractiveGrid(
-              width: 300,
-              height: 300,
-              onChanged: (x, y) {},
-            ),
-          ),
+        double minx = metadataList.isNotEmpty
+            ? double.tryParse(metadataList[0]['min'].toString()) ?? 0
+            : 0;
+        double maxx = metadataList.isNotEmpty
+            ? double.tryParse(metadataList[0]['max'].toString()) ?? 100
+            : 100;
+        String namex = metadataList.isNotEmpty
+            ? metadataList[0]['name'].toString()
+            : 'x';
+
+        double miny = metadataList.length > 1
+            ? double.tryParse(metadataList[1]['min'].toString()) ?? 0
+            : 0;
+        double maxy = metadataList.length > 1
+            ? double.tryParse(metadataList[1]['max'].toString()) ?? 100
+            : 100;
+        String namey = metadataList.length > 1
+            ? metadataList[1]['name'].toString()
+            : 'y';
+
+        return InteractiveGrid(
+          title: name,
+          xLabel: namex,
+          yLabel: namey,
+          xMin: minx,
+          xMax: maxx,
+          yMin: miny,
+          yMax: maxy,
+          width: 300,
+          height: 300,
+          onChanged: (x, y) {
+            _responses[name] = {
+              'x': {'value': x, 'min': minx, 'max': maxx, 'label': namex},
+              'y': {'value': y, 'min': miny, 'max': maxy, 'label': namey},
+            };
+          },
         );
 
       case 'Slider':
@@ -127,9 +176,11 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           question: name,
           min: min,
           max: max,
-          initialValue: _sliderValue,
+          initialValue: (min + max) / 2,
           onChanged: (value) {
-            setState(() => _sliderValue = value);
+            setState(() {
+              _responses[name] = {'value': value, 'min': min, 'max': max};
+            });
           },
         );
 
@@ -148,7 +199,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
         return MultipleChoiceQuestion(
           question: name,
           options: options,
-          onChanged: (selected) {},
+          onChanged: (selected) {
+            _responses[name] = {for (var o in options) o: selected.contains(o)};
+          },
         );
 
       case 'Card Swipe':
@@ -165,14 +218,19 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           height: 400,
           title: name,
           questions: cards.isNotEmpty ? cards : ['Error: sin cards'],
-          onAnswered: (question, answer) {},
+          onAnswered: (question, answer) {
+            _responses[name] ??= {};
+            _responses[name][question] = answer;
+          },
         );
 
       case 'Textbox':
         return CustomTextField(
           label: name,
           hint: metadataMap['hint']?.toString() ?? "Escribe aquí...",
-          onChanged: (value) => {},
+          onChanged: (value) {
+            _responses[name] = value;
+          },
         );
 
       default:
@@ -183,6 +241,39 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
             style: const TextStyle(color: Colors.grey),
           ),
         );
+    }
+  }
+
+  Future<void> _submitForm(String formId) async {
+    try {
+      final responseJson = jsonEncode(_responses);
+      await FirebaseFirestore.instance.collection('form_responses').add({
+        'form_id': '/forms/$formId',
+        'response': responseJson,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Respuestas enviadas correctamente"),
+          backgroundColor: NokeyColorPalette.green,
+        ),
+      );
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error al enviar: $e"),
+          backgroundColor: NokeyColorPalette.mexicanPink,
+        ),
+      );
     }
   }
 }

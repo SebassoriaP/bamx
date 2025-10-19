@@ -12,8 +12,12 @@ class AdminReports extends StatefulWidget {
 }
 
 class _AdminReports extends State<AdminReports> {
-  final CollectionReference formsRes =
-      FirebaseFirestore.instance.collection('form_responses');
+  final CollectionReference forms = FirebaseFirestore.instance.collection(
+    'forms',
+  );
+  final CollectionReference formsRes = FirebaseFirestore.instance.collection(
+    'form_responses',
+  );
 
   @override
   Widget build(BuildContext context) {

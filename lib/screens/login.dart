@@ -172,8 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               builder: (_) => const AdminPanel(),
                             ),
                           );
-                        },                
-
+                        },
                       ),
                       const SizedBox(height: 20),
                     ],
