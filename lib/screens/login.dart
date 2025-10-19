@@ -4,15 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:bamx/screens/home.dart';
 import 'package:bamx/screens/sign_up.dart';
-import 'package:bamx/screens/widget_testing.dart';
-import 'package:bamx/screens/form_creation.dart';
-import 'package:bamx/utils/color_palette.dart';
 import 'package:bamx/screens/admin/admin.dart';
-
 import 'package:bamx/widgets/login/login_form.dart';
-import 'package:bamx/widgets/login/login_footer.dart';
 import 'package:bamx/widgets/container_widget.dart';
-
+import 'package:bamx/utils/color_palette.dart';
 import 'package:bamx/utils/warning.dart';
 import '../utils/validators.dart';
 
@@ -26,7 +21,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
   bool _isLoading = false;
 
   Future<void> login() async {
@@ -104,100 +98,67 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: NokeyColorPalette.white,
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 6,
-                        child: FlexibleContainer(
-                          overlays: const [
-                            Positioned(
-                              bottom: -42,
-                              left: -11,
-                              child: Text(
-                                "NOKEY",
-                                style: TextStyle(
-                                  fontSize: 110,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  letterSpacing: 2,
-                                ),
-                              ),
-                            ),
-                          ],
-                          child: Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (_isLoading)
-                                    const Padding(
-                                      padding: EdgeInsets.all(20),
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  else
-                                    LoginForm(
-                                      emailController: emailController,
-                                      passwordController: passwordController,
-                                      onLogin: login,
-                                      onRegister: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) =>
-                                                const SignUpScreen(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  const SizedBox(height: 20),
-                                ],
-                              ),
-                            ),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FlexibleContainer(
+                    overlays: const [
+                      Positioned(
+                        bottom: -42,
+                        left: -11,
+                        child: Text(
+                          "NOKEY",
+                          style: TextStyle(
+                            fontSize: 110,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            letterSpacing: 2,
                           ),
                         ),
                       ),
-
-                      LoginFooter(
-                        onTestWidgets: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const TestGridScreen(),
-                            ),
-                          );
-                        },
-                        onTestFormCreation: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const FormCreationScreen(),
-                            ),
-                          );
-                        },
-                        onAdmin: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const AdminPanel(),
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 20),
                     ],
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 40),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (_isLoading)
+                              const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: CircularProgressIndicator(),
+                              )
+                            else
+                              LoginForm(
+                                emailController: emailController,
+                                passwordController: passwordController,
+                                onLogin: login,
+                                onRegister: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const SignUpScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
