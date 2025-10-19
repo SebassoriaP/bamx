@@ -7,14 +7,14 @@ class ButtonWidget extends StatelessWidget {
   final Color textColor;
   final double height;
 
-  static int _colorIndex = 0; 
+  static int _colorIndex = 0;
   static final List<Color> _colors = [
-   NokeyColorPalette.mexicanPink,
-  NokeyColorPalette.darkGreen,
-  NokeyColorPalette.purple,
-  NokeyColorPalette.salmon,
-  NokeyColorPalette.darkBlue,
-  NokeyColorPalette.green
+    NokeyColorPalette.mexicanPink,
+    NokeyColorPalette.darkGreen,
+    NokeyColorPalette.purple,
+    NokeyColorPalette.salmon,
+    NokeyColorPalette.darkBlue,
+    NokeyColorPalette.green,
   ];
 
   const ButtonWidget({
@@ -41,24 +41,24 @@ class ButtonWidget extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: onPressed,
-          style: 
-          ElevatedButton.styleFrom(
+          style: ElevatedButton.styleFrom(
             backgroundColor: color,
             foregroundColor: textColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
             minimumSize: Size(double.infinity, height),
           ),
 
-          child: 
-            Text(
-              text,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
+          child: Text(
+            text,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
         ),
-    
-      const SizedBox(height: 8),
 
-      const Text(
+        const SizedBox(height: 8),
+
+        const Text(
           '-Tocar para editar-',
           textAlign: TextAlign.center,
           style: TextStyle(

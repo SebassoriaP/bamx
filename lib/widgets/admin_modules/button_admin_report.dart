@@ -17,7 +17,7 @@ class ButtonWidget extends StatelessWidget {
     NokeyColorPalette.salmon,
     NokeyColorPalette.darkBlue,
   ];
-  
+
   const ButtonWidget({
     super.key,
     required this.user,
@@ -43,7 +43,6 @@ class ButtonWidget extends StatelessWidget {
         Stack(
           clipBehavior: Clip.none,
           children: [
-    
             FlexibleContainer(
               color: color,
               heightFactor: 0.13,
@@ -74,13 +73,18 @@ class ButtonWidget extends StatelessWidget {
             ),
 
             Positioned(
-              top: -18, 
-              left: 20, 
+              top: -18,
+              left: 20,
               child: Container(
                 constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.7, // Límite de ancho
+                  maxWidth:
+                      MediaQuery.of(context).size.width *
+                      0.7, // Límite de ancho
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: NokeyColorPalette.blueGrey,
                   borderRadius: BorderRadius.circular(30),

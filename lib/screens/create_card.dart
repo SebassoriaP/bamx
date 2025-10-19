@@ -57,17 +57,14 @@ class _CreateCardScreenState extends State<CreateCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: 
-      AppBar(
-        title: const Text(
-          'Crear un Nuevo Formulario'
-        ),
-        
+      appBar: AppBar(
+        title: const Text('Crear un Nuevo Formulario'),
+
         iconTheme: IconThemeData(
           color: NokeyColorPalette.white, // Arrow back - color
         ),
       ),
-      
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

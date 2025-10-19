@@ -14,8 +14,9 @@ class AdminTemplates extends StatefulWidget {
 }
 
 class _AdminTemplates extends State<AdminTemplates> {
-  final CollectionReference forms =
-      FirebaseFirestore.instance.collection('forms');
+  final CollectionReference forms = FirebaseFirestore.instance.collection(
+    'forms',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class _AdminTemplates extends State<AdminTemplates> {
                 endIndent: 20,
               ),
               const SizedBox(height: 14),
-                            
+
               StreamBuilder<QuerySnapshot>(
                 stream: forms.snapshots(),
                 builder: (context, snapshot) {
@@ -66,7 +67,8 @@ class _AdminTemplates extends State<AdminTemplates> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => FormEditorScreen(formId: formId),
+                                builder: (_) =>
+                                    FormEditorScreen(formId: formId),
                               ),
                             );
                           },
