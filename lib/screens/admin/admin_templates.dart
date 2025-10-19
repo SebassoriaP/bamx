@@ -5,6 +5,7 @@ import 'package:bamx/widgets/admin_modules/footer_widget.dart';
 import 'package:bamx/widgets/admin_modules/button_admin_template.dart';
 import 'package:bamx/screens/form_creation.dart';
 import 'package:bamx/screens/editable_form.dart';
+import 'dart:math';
 
 class AdminTemplates extends StatefulWidget {
   const AdminTemplates({super.key});
@@ -14,9 +15,27 @@ class AdminTemplates extends StatefulWidget {
 }
 
 class _AdminTemplates extends State<AdminTemplates> {
-  final CollectionReference forms = FirebaseFirestore.instance.collection(
-    'forms',
-  );
+  final CollectionReference forms = FirebaseFirestore.instance.collection('forms');
+
+  final Map<String, Color> _assignedColors = {};
+
+  final List<Color> _availableColors = [
+    NokeyColorPalette.blue,
+    NokeyColorPalette.darkGreen,
+    NokeyColorPalette.purple,
+    NokeyColorPalette.darkBlue,
+    NokeyColorPalette.mexicanPink,
+  ];
+
+  Color _getColorForForm(String formId) {
+    if (_assignedColors.containsKey(formId)) {
+      return _assignedColors[formId]!;
+    }
+    final random = Random();
+    final color = _availableColors[random.nextInt(_availableColors.length)];
+    _assignedColors[formId] = color;
+    return color;
+  }
 
   Future<void> _deleteForm(String formId) async {
     final confirmed = await showDialog<bool>(
@@ -41,15 +60,13 @@ class _AdminTemplates extends State<AdminTemplates> {
 
     if (confirmed != true) return;
 
-    // Perform delete
     await forms.doc(formId).delete();
+    _assignedColors.remove(formId);
 
-    // Only use context if the widget is still mounted
     if (!mounted) return;
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Plantilla eliminada')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Plantilla eliminada')),
+    );
   }
 
   @override
@@ -91,6 +108,7 @@ class _AdminTemplates extends State<AdminTemplates> {
                     children: snapshot.data!.docs.map((doc) {
                       final String formId = doc.id;
                       final String formName = doc['form_name'] ?? 'Formulario';
+                      final buttonColor = _getColorForForm(formId);
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 20),
@@ -99,6 +117,7 @@ class _AdminTemplates extends State<AdminTemplates> {
                           children: [
                             ButtonWidget(
                               text: formName,
+                              backgroundColor: buttonColor,
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -109,7 +128,6 @@ class _AdminTemplates extends State<AdminTemplates> {
                                 );
                               },
                             ),
-
                             Positioned(
                               right: -15,
                               top: 0,

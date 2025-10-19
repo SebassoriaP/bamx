@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bamx/utils/color_palette.dart';
 import 'package:bamx/widgets/form_modules/grid_widget.dart';
 import 'package:bamx/widgets/form_modules/slider_widget.dart';
@@ -11,8 +12,9 @@ import 'package:bamx/screens/home.dart';
 
 class FormRenderScreen extends StatefulWidget {
   final Map<String, dynamic> formData;
+  final String formId;
 
-  const FormRenderScreen({super.key, required this.formData});
+  const FormRenderScreen({super.key, required this.formData, required this.formId});
 
   @override
   State<FormRenderScreen> createState() => _FormRenderScreenState();
@@ -24,7 +26,6 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
   @override
   Widget build(BuildContext context) {
     final formName = widget.formData['form_name'] ?? 'Formulario sin nombre';
-    final formId = widget.formData['id'] ?? 'unknown_form_id';
     final questionsRaw = widget.formData['questions'];
 
     List<Map<String, dynamic>> questions = [];
@@ -40,10 +41,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: NokeyColorPalette.white, // Arrow back - color
-        ),
-
+        iconTheme: const IconThemeData(color: NokeyColorPalette.white),
         backgroundColor: NokeyColorPalette.blue,
         title: Text(
           formName,
@@ -63,16 +61,13 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: NokeyColorPalette.blue,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 16,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               onPressed: () async {
-                await _submitForm(formId);
+                await _submitForm(widget.formId);
               },
               child: const Text(
                 "Enviar respuestas",
@@ -98,9 +93,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       metadataMap = Map<String, dynamic>.from(rawMetadata);
     } else if (rawMetadata is List) {
       if (rawMetadata.isNotEmpty && rawMetadata.first is Map) {
-        metadataList = rawMetadata
-            .map((e) => Map<String, dynamic>.from(e))
-            .toList();
+        metadataList = rawMetadata.map((e) => Map<String, dynamic>.from(e)).toList();
       } else if (rawMetadata.isNotEmpty && rawMetadata.first is String) {
         metadataStrings = List<String>.from(rawMetadata);
       }
@@ -111,9 +104,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           metadataMap = Map<String, dynamic>.from(decoded);
         } else if (decoded is List) {
           if (decoded.isNotEmpty && decoded.first is Map) {
-            metadataList = decoded
-                .map((e) => Map<String, dynamic>.from(e))
-                .toList();
+            metadataList = decoded.map((e) => Map<String, dynamic>.from(e)).toList();
           } else if (decoded.isNotEmpty && decoded.first is String) {
             metadataStrings = List<String>.from(decoded);
           }
@@ -187,9 +178,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       case 'Checkbox':
         List<String> options = [];
         if (metadataList.isNotEmpty) {
-          options = metadataList
-              .map((e) => e['name']?.toString() ?? '')
-              .toList();
+          options = metadataList.map((e) => e['name']?.toString() ?? '').toList();
         } else if (metadataStrings.isNotEmpty) {
           options = metadataStrings;
         } else if (metadataMap.containsKey('options')) {
@@ -247,17 +236,44 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
   Future<void> _submitForm(String formId) async {
     try {
       final responseJson = jsonEncode(_responses);
-      await FirebaseFirestore.instance.collection('form_responses').add({
-        'form_id': '/forms/$formId',
+
+      final User? user = FirebaseAuth.instance.currentUser;
+      String email = 'No email';
+
+      if (user != null && user.email != null) {
+        email = user.email!;
+      } else {
+        debugPrint('Error fetching user');
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("No se pudo obtener el usuario"),
+            backgroundColor: NokeyColorPalette.mexicanPink,
+          ),
+        );
+        return;
+      }
+
+      final dataToSend = {
+        'form_id': FirebaseFirestore.instance.doc('forms/$formId'),
         'response': responseJson,
         'timestamp': FieldValue.serverTimestamp(),
-      });
+        'user': email,
+      };
+
+      debugPrint('Sending form responses to Firestore:');
+      debugPrint(dataToSend.toString());
+
+      await FirebaseFirestore.instance.collection('form_responses').add(dataToSend);
 
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Respuestas enviadas correctamente"),
+        SnackBar(
+          content: Text(
+            "Respuestas enviadas correctamente a nombre de $email",
+            style: const TextStyle(color: NokeyColorPalette.black),
+          ),
           backgroundColor: NokeyColorPalette.green,
         ),
       );
