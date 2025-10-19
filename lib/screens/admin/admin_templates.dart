@@ -14,7 +14,43 @@ class AdminTemplates extends StatefulWidget {
 }
 
 class _AdminTemplates extends State<AdminTemplates> {
-  final CollectionReference forms = FirebaseFirestore.instance.collection('forms');
+  final CollectionReference forms = FirebaseFirestore.instance.collection(
+    'forms',
+  );
+
+  Future<void> _deleteForm(String formId) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Eliminar plantilla'),
+        content: const Text(
+          '¿Estás seguro de que deseas eliminar esta plantilla?',
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Cancelar'),
+            onPressed: () => Navigator.of(context).pop(false),
+          ),
+          TextButton(
+            child: const Text('Eliminar'),
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    // Perform delete
+    await forms.doc(formId).delete();
+
+    // Only use context if the widget is still mounted
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Plantilla eliminada')));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,19 +97,19 @@ class _AdminTemplates extends State<AdminTemplates> {
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
-                            // The full-width card
                             ButtonWidget(
                               text: formName,
                               onPressed: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => FormEditorScreen(formId: formId),
+                                    builder: (_) =>
+                                        FormEditorScreen(formId: formId),
                                   ),
                                 );
                               },
                             ),
-                            
+
                             Positioned(
                               right: -15,
                               top: 0,
@@ -91,36 +127,11 @@ class _AdminTemplates extends State<AdminTemplates> {
                                   ],
                                 ),
                                 child: IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.white),
-                                  onPressed: () async {
-                                    final confirmed = await showDialog<bool>(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: const Text('Eliminar plantilla'),
-                                        content: const Text(
-                                            '¿Estás seguro de que deseas eliminar esta plantilla?'),
-                                        actions: [
-                                          TextButton(
-                                            child: const Text('Cancelar'),
-                                            onPressed: () => Navigator.of(context).pop(false),
-                                          ),
-                                          TextButton(
-                                            child: const Text('Eliminar'),
-                                            onPressed: () => Navigator.of(context).pop(true),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-
-                                    if (confirmed == true) {
-                                      await forms.doc(formId).delete();
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Plantilla eliminada'),
-                                        ),
-                                      );
-                                    }
-                                  },
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () => _deleteForm(formId),
                                 ),
                               ),
                             ),

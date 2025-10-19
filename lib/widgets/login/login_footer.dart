@@ -31,7 +31,7 @@ class LoginFooter extends StatelessWidget {
         ButtonWidget(
           text: "Try Out Form Creation",
           textColor: NokeyColorPalette.black,
-          color: NokeyColorPalette.salmon,
+          color: NokeyColorPalette.yellow,
           onPressed: onTestFormCreation,
         ),
 

@@ -78,9 +78,7 @@ class ButtonWidget extends StatelessWidget {
               left: 20,
               child: Container(
                 constraints: BoxConstraints(
-                  maxWidth:
-                      MediaQuery.of(context).size.width *
-                      0.7,
+                  maxWidth: MediaQuery.of(context).size.width * 0.7,
                 ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 18,
