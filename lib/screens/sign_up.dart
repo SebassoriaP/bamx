@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bamx/screens/home.dart';
 import 'package:bamx/utils/warning.dart';
 import 'package:bamx/utils/validators.dart';
+import 'package:bamx/utils/color_palette.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -78,7 +79,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Registro")),
+      appBar: AppBar(
+        title: const Text("Registro"),
+        iconTheme: IconThemeData(
+          color: NokeyColorPalette.white, // Arrow back - color
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
