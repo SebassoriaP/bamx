@@ -32,6 +32,11 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        
+        iconTheme: IconThemeData(
+          color: NokeyColorPalette.white, // Arrow back - color
+        ),
+
         backgroundColor: NokeyColorPalette.blue,
         title: const Text(
           "Formularios",

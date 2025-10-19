@@ -38,6 +38,11 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
 
     return Scaffold(
       appBar: AppBar(
+
+        iconTheme: IconThemeData(
+          color: NokeyColorPalette.white, // Arrow back - color
+        ),
+        
         backgroundColor: NokeyColorPalette.blue,
         title: Text(
           formName,

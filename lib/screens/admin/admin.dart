@@ -25,6 +25,11 @@ class _AdminPanelState extends State<AdminPanel> {
               fontWeight: FontWeight.bold,
             ),
           ),
+
+          iconTheme: IconThemeData(
+            color: NokeyColorPalette.white, // Arrow back - color
+          ),
+
           bottom: const TabBar(
             indicatorColor: NokeyColorPalette.yellow,
             labelColor: NokeyColorPalette.white,

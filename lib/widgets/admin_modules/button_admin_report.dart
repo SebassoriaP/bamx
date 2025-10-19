@@ -17,7 +17,7 @@ class ButtonWidget extends StatelessWidget {
     NokeyColorPalette.salmon,
     NokeyColorPalette.darkBlue,
   ];
-
+  
   const ButtonWidget({
     super.key,
     required this.user,
@@ -43,7 +43,7 @@ class ButtonWidget extends StatelessWidget {
         Stack(
           clipBehavior: Clip.none,
           children: [
-            // --- Contenedor principal con botón grande ---
+    
             FlexibleContainer(
               color: color,
               heightFactor: 0.13,
@@ -108,7 +108,7 @@ class ButtonWidget extends StatelessWidget {
         const SizedBox(height: 1),
 
         const Text(
-          '-Tocar para editar-',
+          '-Tocar para ver resultados-',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14,
