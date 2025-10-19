@@ -56,7 +56,8 @@ class _FormEditorScreenState extends State<FormEditorScreen> {
             'maxValue': int.tryParse(v['max'].toString()) ?? 10,
           };
         }).toList();
-      } else if ((type == 'Checkbox' || type == 'Card Swipe') && metadata is List) {
+      } else if ((type == 'Checkbox' || type == 'Card Swipe') &&
+          metadata is List) {
         questionsList = metadata.map<Map<String, dynamic>>((v) {
           if (v is String) {
             return {'controller': TextEditingController(text: v)};
@@ -94,7 +95,9 @@ class _FormEditorScreenState extends State<FormEditorScreen> {
           };
         }).toList();
       } else if (card['type'] == 'Checkbox' || card['type'] == 'Card Swipe') {
-        metadata = (card['questions'] as List).map((q) => q['controller'].text).toList();
+        metadata = (card['questions'] as List)
+            .map((q) => q['controller'].text)
+            .toList();
       } else {
         metadata = {};
       }
@@ -111,9 +114,9 @@ class _FormEditorScreenState extends State<FormEditorScreen> {
         .collection('forms')
         .doc(widget.formId)
         .update({
-      'form_name': _formTitleController.text,
-      'questions': questionsToSave,
-    });
+          'form_name': _formTitleController.text,
+          'questions': questionsToSave,
+        });
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -220,14 +223,14 @@ class _FormEditorScreenState extends State<FormEditorScreen> {
                 },
               )
             : (type == "Slider")
-                ? [
-                    {
-                      "nameController": TextEditingController(),
-                      "minValue": 0,
-                      "maxValue": 10,
-                    },
-                  ]
-                : [],
+            ? [
+                {
+                  "nameController": TextEditingController(),
+                  "minValue": 0,
+                  "maxValue": 10,
+                },
+              ]
+            : [],
         "questions": (type == "Checkbox" || type == "Card Swipe")
             ? [
                 {"controller": TextEditingController()},
@@ -241,25 +244,19 @@ class _FormEditorScreenState extends State<FormEditorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
         iconTheme: IconThemeData(
           color: NokeyColorPalette.white, // Arrow back - color
         ),
-        
+
         title: Text(
-          "Editar Formulario", 
-          style: TextStyle(
-            color:NokeyColorPalette.white,
-          ),
+          "Editar Formulario",
+          style: TextStyle(color: NokeyColorPalette.white),
         ),
 
         backgroundColor: NokeyColorPalette.blue,
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.save,
-              color: NokeyColorPalette.white,
-              ),
+            icon: const Icon(Icons.save, color: NokeyColorPalette.white),
             onPressed: _saveForm,
           ),
         ],

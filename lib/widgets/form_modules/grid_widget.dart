@@ -132,11 +132,11 @@ class _InteractiveGridState extends State<InteractiveGrid> {
                             left = dotPosition.dx - labelWidth - labelPadding;
                           }
 
-                          if (top < 0){
+                          if (top < 0) {
                             top = 0;
                           }
 
-                          if (top + labelHeight > height){
+                          if (top + labelHeight > height) {
                             top = height - labelHeight;
                           }
 
@@ -228,7 +228,11 @@ class _GridPainter extends CustomPainter {
     );
     canvas.drawLine(Offset(0, 0), Offset(0, size.height), axisPaint);
 
-    void drawText(String text, Offset offset, {Color color = NokeyColorPalette.blue}) {
+    void drawText(
+      String text,
+      Offset offset, {
+      Color color = NokeyColorPalette.blue,
+    }) {
       final tp = TextPainter(
         text: TextSpan(
           text: text,

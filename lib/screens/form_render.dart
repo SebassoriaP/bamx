@@ -31,19 +31,19 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
     if (questionsRaw is List) {
       questions = List<Map<String, dynamic>>.from(questionsRaw);
     } else if (questionsRaw is Map) {
-      questions =
-          questionsRaw.values.map((e) => Map<String, dynamic>.from(e)).toList();
+      questions = questionsRaw.values
+          .map((e) => Map<String, dynamic>.from(e))
+          .toList();
     } else if (questionsRaw != null) {
       questions = [Map<String, dynamic>.from(questionsRaw)];
     }
 
     return Scaffold(
       appBar: AppBar(
-
         iconTheme: IconThemeData(
           color: NokeyColorPalette.white, // Arrow back - color
         ),
-        
+
         backgroundColor: NokeyColorPalette.blue,
         title: Text(
           formName,
@@ -63,8 +63,10 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: NokeyColorPalette.blue,
                 foregroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 16,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -96,8 +98,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       metadataMap = Map<String, dynamic>.from(rawMetadata);
     } else if (rawMetadata is List) {
       if (rawMetadata.isNotEmpty && rawMetadata.first is Map) {
-        metadataList =
-            rawMetadata.map((e) => Map<String, dynamic>.from(e)).toList();
+        metadataList = rawMetadata
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
       } else if (rawMetadata.isNotEmpty && rawMetadata.first is String) {
         metadataStrings = List<String>.from(rawMetadata);
       }
@@ -108,8 +111,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           metadataMap = Map<String, dynamic>.from(decoded);
         } else if (decoded is List) {
           if (decoded.isNotEmpty && decoded.first is Map) {
-            metadataList =
-                decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+            metadataList = decoded
+                .map((e) => Map<String, dynamic>.from(e))
+                .toList();
           } else if (decoded.isNotEmpty && decoded.first is String) {
             metadataStrings = List<String>.from(decoded);
           }
@@ -127,8 +131,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
         double maxx = metadataList.isNotEmpty
             ? double.tryParse(metadataList[0]['max'].toString()) ?? 100
             : 100;
-        String namex =
-            metadataList.isNotEmpty ? metadataList[0]['name'].toString() : 'x';
+        String namex = metadataList.isNotEmpty
+            ? metadataList[0]['name'].toString()
+            : 'x';
 
         double miny = metadataList.length > 1
             ? double.tryParse(metadataList[1]['min'].toString()) ?? 0
@@ -136,8 +141,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
         double maxy = metadataList.length > 1
             ? double.tryParse(metadataList[1]['max'].toString()) ?? 100
             : 100;
-        String namey =
-            metadataList.length > 1 ? metadataList[1]['name'].toString() : 'y';
+        String namey = metadataList.length > 1
+            ? metadataList[1]['name'].toString()
+            : 'y';
 
         return InteractiveGrid(
           title: name,
@@ -173,11 +179,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           initialValue: (min + max) / 2,
           onChanged: (value) {
             setState(() {
-              _responses[name] = {
-                'value': value,
-                'min': min,
-                'max': max,
-              };
+              _responses[name] = {'value': value, 'min': min, 'max': max};
             });
           },
         );
@@ -185,8 +187,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       case 'Checkbox':
         List<String> options = [];
         if (metadataList.isNotEmpty) {
-          options =
-              metadataList.map((e) => e['name']?.toString() ?? '').toList();
+          options = metadataList
+              .map((e) => e['name']?.toString() ?? '')
+              .toList();
         } else if (metadataStrings.isNotEmpty) {
           options = metadataStrings;
         } else if (metadataMap.containsKey('options')) {
@@ -197,9 +200,7 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           question: name,
           options: options,
           onChanged: (selected) {
-            _responses[name] = {
-              for (var o in options) o: selected.contains(o),
-            };
+            _responses[name] = {for (var o in options) o: selected.contains(o)};
           },
         );
 
@@ -252,6 +253,8 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
         'timestamp': FieldValue.serverTimestamp(),
       });
 
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Respuestas enviadas correctamente"),
@@ -263,8 +266,8 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
-
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error al enviar: $e"),
