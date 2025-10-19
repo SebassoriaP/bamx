@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bamx/utils/color_palette.dart';
 import 'package:bamx/widgets/admin_modules/button_admin_report.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bamx/screens/form_results.dart';
 
 class AdminReports extends StatefulWidget {
   const AdminReports({super.key});
@@ -11,8 +12,6 @@ class AdminReports extends StatefulWidget {
 }
 
 class _AdminReports extends State<AdminReports> {
-  final CollectionReference forms =
-      FirebaseFirestore.instance.collection('forms');
   final CollectionReference formsRes =
       FirebaseFirestore.instance.collection('form_responses');
 
@@ -32,16 +31,16 @@ class _AdminReports extends State<AdminReports> {
             ),
           ),
           const SizedBox(height: 5),
-
           const Divider(
             color: NokeyColorPalette.blue,
             thickness: 1,
             indent: 20,
             endIndent: 20,
           ),
-
+          
+          const SizedBox(height: 19),
+          
           const SizedBox(height: 14),
-
           StreamBuilder<QuerySnapshot>(
             stream: formsRes.snapshots(),
             builder: (context, snapshot) {
@@ -74,8 +73,7 @@ class _AdminReports extends State<AdminReports> {
                         );
                       }
 
-                      if (!formSnapshot.hasData ||
-                          !formSnapshot.data!.exists) {
+                      if (!formSnapshot.hasData || !formSnapshot.data!.exists) {
                         return const Text('Formulario no encontrado.');
                       }
 
@@ -89,9 +87,16 @@ class _AdminReports extends State<AdminReports> {
                         child: ButtonWidget(
                           user: user,
                           text: formName,
-                          onPressed: () => debugPrint(
-                            'Botón presionado → Usuario: $user | Formulario: $formName',
-                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => FormResultsScreen(
+                                  responseId: doc.id, 
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
