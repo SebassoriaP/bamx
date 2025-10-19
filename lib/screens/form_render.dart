@@ -14,7 +14,11 @@ class FormRenderScreen extends StatefulWidget {
   final Map<String, dynamic> formData;
   final String formId;
 
-  const FormRenderScreen({super.key, required this.formData, required this.formId});
+  const FormRenderScreen({
+    super.key,
+    required this.formData,
+    required this.formId,
+  });
 
   @override
   State<FormRenderScreen> createState() => _FormRenderScreenState();
@@ -61,7 +65,10 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: NokeyColorPalette.blue,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 16,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -93,7 +100,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       metadataMap = Map<String, dynamic>.from(rawMetadata);
     } else if (rawMetadata is List) {
       if (rawMetadata.isNotEmpty && rawMetadata.first is Map) {
-        metadataList = rawMetadata.map((e) => Map<String, dynamic>.from(e)).toList();
+        metadataList = rawMetadata
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
       } else if (rawMetadata.isNotEmpty && rawMetadata.first is String) {
         metadataStrings = List<String>.from(rawMetadata);
       }
@@ -104,7 +113,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
           metadataMap = Map<String, dynamic>.from(decoded);
         } else if (decoded is List) {
           if (decoded.isNotEmpty && decoded.first is Map) {
-            metadataList = decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+            metadataList = decoded
+                .map((e) => Map<String, dynamic>.from(e))
+                .toList();
           } else if (decoded.isNotEmpty && decoded.first is String) {
             metadataStrings = List<String>.from(decoded);
           }
@@ -178,7 +189,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       case 'Checkbox':
         List<String> options = [];
         if (metadataList.isNotEmpty) {
-          options = metadataList.map((e) => e['name']?.toString() ?? '').toList();
+          options = metadataList
+              .map((e) => e['name']?.toString() ?? '')
+              .toList();
         } else if (metadataStrings.isNotEmpty) {
           options = metadataStrings;
         } else if (metadataMap.containsKey('options')) {
@@ -264,7 +277,9 @@ class _FormRenderScreenState extends State<FormRenderScreen> {
       debugPrint('Sending form responses to Firestore:');
       debugPrint(dataToSend.toString());
 
-      await FirebaseFirestore.instance.collection('form_responses').add(dataToSend);
+      await FirebaseFirestore.instance
+          .collection('form_responses')
+          .add(dataToSend);
 
       if (!mounted) return;
 

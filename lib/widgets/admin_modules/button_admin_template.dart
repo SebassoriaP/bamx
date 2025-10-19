@@ -34,10 +34,7 @@ class ButtonWidget extends StatelessWidget {
           ),
           child: Text(
             text,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
         ),
         const SizedBox(height: 8),

@@ -12,8 +12,9 @@ class AdminReports extends StatefulWidget {
 }
 
 class _AdminReports extends State<AdminReports> {
-  final CollectionReference formsRes =
-      FirebaseFirestore.instance.collection('form_responses');
+  final CollectionReference formsRes = FirebaseFirestore.instance.collection(
+    'form_responses',
+  );
 
   final Map<String, Color> _assignedColors = {};
 
@@ -29,7 +30,8 @@ class _AdminReports extends State<AdminReports> {
     if (_assignedColors.containsKey(docId)) {
       return _assignedColors[docId]!;
     }
-    final color = _availableColors[_assignedColors.length % _availableColors.length];
+    final color =
+        _availableColors[_assignedColors.length % _availableColors.length];
     _assignedColors[docId] = color;
     return color;
   }
@@ -148,7 +150,8 @@ class _AdminReports extends State<AdminReports> {
                         FutureBuilder<String>(
                           future: getFormName(formRef),
                           builder: (context, formNameSnapshot) {
-                            final formName = formNameSnapshot.data ??
+                            final formName =
+                                formNameSnapshot.data ??
                                 'Respuesta Generada con Plantilla Borrada';
                             return ButtonWidget(
                               user: user,

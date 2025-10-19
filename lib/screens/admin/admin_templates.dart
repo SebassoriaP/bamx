@@ -15,7 +15,9 @@ class AdminTemplates extends StatefulWidget {
 }
 
 class _AdminTemplates extends State<AdminTemplates> {
-  final CollectionReference forms = FirebaseFirestore.instance.collection('forms');
+  final CollectionReference forms = FirebaseFirestore.instance.collection(
+    'forms',
+  );
 
   final Map<String, Color> _assignedColors = {};
 
@@ -64,9 +66,9 @@ class _AdminTemplates extends State<AdminTemplates> {
     _assignedColors.remove(formId);
 
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Plantilla eliminada')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Plantilla eliminada')));
   }
 
   @override
