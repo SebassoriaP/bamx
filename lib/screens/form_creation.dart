@@ -265,7 +265,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
                     card: _cards[i],
                     onRemove: () => _removeCard(i),
                     onQuestionsUpdated: () => setState(() {}),
-                    showNameField: true, // 👈 enable name field rendering
+                    showNameField: true, // enable name field rendering
                   ),
                 ),
               ),
