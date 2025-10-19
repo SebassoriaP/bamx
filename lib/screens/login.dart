@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:bamx/screens/home.dart';
 import 'package:bamx/screens/sign_up.dart';
@@ -26,11 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  bool _isLoading = false;
+
   Future<void> login() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
-
-    // Local validations before sending them to firebase
 
     if (email.isEmpty || password.isEmpty) {
       showErrorMessage(context, "Por favor completa todos los campos.");
@@ -46,22 +47,18 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     if (!isValidEmail(email)) {
-      showErrorMessage(
-        context,
-        "Correo electrónico inválido",
-      ); //Change later for "Correo electrónico o contraseña incorrecta"
+      showErrorMessage(context, "Correo electrónico inválido");
       return;
     }
 
     if (!isValidPassword(password)) {
-      showErrorMessage(
-        context,
-        "La contraseña es incorrecta",
-      ); //Change later for "Correo electrónico o contraseña incorrecta"
+      showErrorMessage(context, "La contraseña es incorrecta");
       return;
     }
 
     try {
+      setState(() => _isLoading = true);
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -69,10 +66,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
+      final adminSnapshot = await FirebaseFirestore.instance
+          .collection('admins')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (!mounted) return;
+
+      if (adminSnapshot.docs.isNotEmpty) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const AdminPanel()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      }
     } on FirebaseAuthException catch (_) {
       if (!mounted) return;
       showErrorMessage(
@@ -82,6 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (!mounted) return;
       showErrorMessage(context, "Ocurrió un error inesperado");
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -118,25 +132,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                           child: Center(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24.0,
-                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  LoginForm(
-                                    emailController: emailController,
-                                    passwordController: passwordController,
-                                    onLogin: login,
-                                    onRegister: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const SignUpScreen(),
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                  if (_isLoading)
+                                    const Padding(
+                                      padding: EdgeInsets.all(20),
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  else
+                                    LoginForm(
+                                      emailController: emailController,
+                                      passwordController: passwordController,
+                                      onLogin: login,
+                                      onRegister: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                const SignUpScreen(),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   const SizedBox(height: 20),
                                 ],
                               ),
@@ -145,7 +165,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
 
-                      // Footer stays at bottom
                       LoginFooter(
                         onTestWidgets: () {
                           Navigator.push(
@@ -155,7 +174,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-
                         onTestFormCreation: () {
                           Navigator.push(
                             context,
@@ -164,7 +182,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-
                         onAdmin: () {
                           Navigator.push(
                             context,
