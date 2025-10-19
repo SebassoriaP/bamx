@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bamx/utils/color_palette.dart';
 import 'package:bamx/widgets/admin_modules/footer_widget.dart';
 import 'package:bamx/widgets/admin_modules/button_admin_template.dart';
+import 'package:bamx/screens/form_creation.dart';
+import 'package:bamx/screens/editable_form.dart';
 
 class AdminTemplates extends StatefulWidget {
   const AdminTemplates({super.key});
@@ -39,8 +41,7 @@ class _AdminTemplates extends State<AdminTemplates> {
                 endIndent: 20,
               ),
               const SizedBox(height: 14),
-
-              // Formularios desde Firebase
+                            
               StreamBuilder<QuerySnapshot>(
                 stream: forms.snapshots(),
                 builder: (context, snapshot) {
@@ -54,13 +55,21 @@ class _AdminTemplates extends State<AdminTemplates> {
 
                   return Column(
                     children: snapshot.data!.docs.map((doc) {
-                      String formName = doc['form_name'] ?? 'Formulario';
+                      final String formId = doc.id; // ID del formulario
+                      final String formName = doc['form_name'] ?? 'Formulario';
+
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: ButtonWidget(
                           text: formName,
-                          onPressed: () =>
-                              debugPrint('Botón $formName presionado'),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => FormEditorScreen(formId: formId),
+                              ),
+                            );
+                          },
                         ),
                       );
                     }).toList(),
@@ -79,7 +88,14 @@ class _AdminTemplates extends State<AdminTemplates> {
             mainAxisSize: MainAxisSize.min,
             children: [
               FooterWidget(
-                onPressed: () => debugPrint('Nuevo reporte - Button'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const FormCreationScreen(),
+                    ),
+                  );
+                },
               ),
               Container(
                 width: double.infinity,

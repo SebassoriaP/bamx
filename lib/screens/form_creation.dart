@@ -215,6 +215,11 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
     return Scaffold(
       backgroundColor: NokeyColorPalette.white,
       appBar: AppBar(
+
+        iconTheme: IconThemeData(
+          color: NokeyColorPalette.white, // Arrow back - color
+        ),
+        
         title: const Text(
           "Form Template Creator",
           style: TextStyle(
