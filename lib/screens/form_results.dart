@@ -66,7 +66,7 @@ class _FormResultsScreenState extends State<FormResultsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // 
+                  //
                   Text(
                     key,
                     textAlign: TextAlign.center,
@@ -99,7 +99,9 @@ class _FormResultsScreenState extends State<FormResultsScreen> {
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 12),
+                                vertical: 10,
+                                horizontal: 12,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
@@ -126,7 +128,9 @@ class _FormResultsScreenState extends State<FormResultsScreen> {
                     Container(
                       margin: const EdgeInsets.only(top: 8),
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 12),
+                        vertical: 10,
+                        horizontal: 12,
+                      ),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -164,9 +168,7 @@ class _FormResultsScreenState extends State<FormResultsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: NokeyColorPalette.white,
-        ),
+        iconTheme: const IconThemeData(color: NokeyColorPalette.white),
         title: Text(
           'RESULTADOS DE: $userName',
           style: const TextStyle(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bamx/widgets/button_widget.dart';
+import 'package:bamx/utils/color_palette.dart';
 
 class LoginForm extends StatelessWidget {
   final TextEditingController emailController;
@@ -20,7 +21,6 @@ class LoginForm extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Usuario
         TextField(
           controller: emailController,
           decoration: InputDecoration(
@@ -37,8 +37,9 @@ class LoginForm extends StatelessWidget {
             ),
           ),
         ),
+
         const SizedBox(height: 16),
-        // Contraseña
+
         TextField(
           controller: passwordController,
           obscureText: true,
@@ -60,14 +61,13 @@ class LoginForm extends StatelessWidget {
 
         ButtonWidget(
           text: "Iniciar Sesión",
-          color: const Color(0xFFFFC107),
-          textColor: Colors.black,
+          color: NokeyColorPalette.yellow,
+          textColor: NokeyColorPalette.black,
           onPressed: onLogin,
         ),
 
         const SizedBox(height: 32),
 
-        // Registro
         Column(
           children: [
             const Text(
@@ -79,15 +79,19 @@ class LoginForm extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
+
             TextButton(
               onPressed: onRegister,
               child: const Text(
                 "REGISTRARME",
                 style: TextStyle(
-                  color: Colors.purple,
+                  color: NokeyColorPalette.lightYellow,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 18,
+                  letterSpacing: 1.2,
                   decoration: TextDecoration.underline,
-                  decorationColor: Colors.purple,
-                  fontWeight: FontWeight.bold,
+                  decorationColor: NokeyColorPalette.lightYellow,
+                  decorationThickness: 2,
                 ),
               ),
             ),

@@ -12,9 +12,9 @@ class ButtonWidget extends StatelessWidget {
     NokeyColorPalette.mexicanPink,
     NokeyColorPalette.darkGreen,
     NokeyColorPalette.purple,
-    NokeyColorPalette.salmon,
     NokeyColorPalette.darkBlue,
-    NokeyColorPalette.green,
+    NokeyColorPalette.yellow,
+    NokeyColorPalette.blue,
   ];
 
   const ButtonWidget({
@@ -69,7 +69,6 @@ class ButtonWidget extends StatelessWidget {
         ),
 
         const SizedBox(height: 10),
-
       ],
     );
   }
