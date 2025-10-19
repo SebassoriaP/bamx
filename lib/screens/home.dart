@@ -3,28 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bamx/screens/login.dart';
 import 'package:bamx/utils/color_palette.dart';
-import 'package:bamx/screens/form_creation.dart';
 import 'package:bamx/screens/form_render.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  Color parseColor(String colorString) {
-    switch (colorString.toLowerCase()) {
-      case 'blanco':
-        return NokeyColorPalette.white;
-      case 'rojo':
-        return NokeyColorPalette.mexicanPink;
-      case 'azul':
-        return NokeyColorPalette.blue;
-      case 'verde':
-        return NokeyColorPalette.green;
-      case 'amarillo':
-        return NokeyColorPalette.yellow;
-      default:
-        return NokeyColorPalette.blueGrey;
-    }
-  }
+  final List<Color> buttonColors = const [
+    NokeyColorPalette.purple,
+    NokeyColorPalette.darkBlue,
+    NokeyColorPalette.blue,
+    NokeyColorPalette.mexicanPink,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +21,14 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: NokeyColorPalette.white, // Arrow back - color
-        ),
-
+        automaticallyImplyLeading: false,
         backgroundColor: NokeyColorPalette.blue,
         title: const Text(
-          "Formularios",
+          "SELECCIÓN DE PLANTILLA",
           style: TextStyle(
             color: NokeyColorPalette.white,
             fontWeight: FontWeight.bold,
-            fontSize: 22,
+            fontSize: 20,
           ),
         ),
         actions: [
@@ -60,104 +46,95 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Bienvenido, ${user?.email ?? 'Usuario'}",
-              style: const TextStyle(fontSize: 18),
-            ),
-          ),
-          const Divider(thickness: 1, height: 32),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('forms')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(
-                    child: Text("No hay formularios disponibles"),
-                  );
-                }
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('forms').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text("No hay formularios disponibles"));
+          }
 
-                final docs = snapshot.data!.docs;
+          final docs = snapshot.data!.docs;
 
-                return ListView.builder(
-                  itemCount: docs.length,
-                  itemBuilder: (context, index) {
-                    final data = docs[index].data() as Map<String, dynamic>;
-                    final formName = data['form_name'] ?? 'Sin nombre';
-                    final color = NokeyColorPalette.green;
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              final data = docs[index].data() as Map<String, dynamic>;
+              final formName = data['form_name'] ?? 'Sin nombre';
+              final bgColor = buttonColors[index % buttonColors.length];
 
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => FormRenderScreen(formData: data),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+              return Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: bgColor,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 4,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => FormRenderScreen(formData: data),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 20,
-                        ),
-                        decoration: BoxDecoration(
-                          color: color,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 4,
-                              offset: Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: NokeyColorPalette.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                               child: Text(
-                                formName,
-                                style: const TextStyle(
-                                  fontSize: 18,
+                                formName.toUpperCase(),
+                                style: TextStyle(
+                                  color: bgColor,
                                   fontWeight: FontWeight.bold,
-                                  color: NokeyColorPalette.white,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
-                            const Icon(
-                              Icons.arrow_forward_ios,
-                              color: NokeyColorPalette.white,
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: const BoxDecoration(
+                              color: NokeyColorPalette.yellow,
+                              shape: BoxShape.circle,
                             ),
-                          ],
-                        ),
+                            child: const Icon(
+                              Icons.edit,
+                              color: NokeyColorPalette.black,
+                              size: 20,
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: NokeyColorPalette.yellow,
-        child: const Icon(Icons.add, color: NokeyColorPalette.black),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const FormCreationScreen()),
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),

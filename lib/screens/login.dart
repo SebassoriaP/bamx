@@ -126,7 +126,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0, vertical: 40),
+                          horizontal: 24.0,
+                          vertical: 40,
+                        ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [

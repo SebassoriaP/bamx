@@ -41,9 +41,9 @@ class _AdminReports extends State<AdminReports> {
             indent: 20,
             endIndent: 20,
           ),
-          
+
           const SizedBox(height: 19),
-          
+
           const SizedBox(height: 14),
           StreamBuilder<QuerySnapshot>(
             stream: formsRes.snapshots(),
@@ -95,9 +95,8 @@ class _AdminReports extends State<AdminReports> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => FormResultsScreen(
-                                  responseId: doc.id, 
-                                ),
+                                builder: (_) =>
+                                    FormResultsScreen(responseId: doc.id),
                               ),
                             );
                           },

@@ -14,8 +14,9 @@ class ButtonWidget extends StatelessWidget {
     NokeyColorPalette.mexicanPink,
     NokeyColorPalette.darkGreen,
     NokeyColorPalette.purple,
-    NokeyColorPalette.salmon,
     NokeyColorPalette.darkBlue,
+    NokeyColorPalette.yellow,
+    NokeyColorPalette.blue,
   ];
 
   const ButtonWidget({
@@ -23,7 +24,7 @@ class ButtonWidget extends StatelessWidget {
     required this.user,
     required this.text,
     required this.onPressed,
-    this.textColor = Colors.white,
+    this.textColor = NokeyColorPalette.white,
     this.height = 55,
   });
 
@@ -79,7 +80,7 @@ class ButtonWidget extends StatelessWidget {
                 constraints: BoxConstraints(
                   maxWidth:
                       MediaQuery.of(context).size.width *
-                      0.7, // Límite de ancho
+                      0.7,
                 ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 18,
@@ -122,7 +123,6 @@ class ButtonWidget extends StatelessWidget {
         ),
 
         const SizedBox(height: 19),
-
       ],
     );
   }

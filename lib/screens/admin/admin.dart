@@ -30,6 +30,7 @@ class _AdminPanelState extends State<AdminPanel> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: NokeyColorPalette.blue,
           title: const Text(
             'ADMINISTRACIÓN',
@@ -38,9 +39,7 @@ class _AdminPanelState extends State<AdminPanel> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          iconTheme: const IconThemeData(
-            color: NokeyColorPalette.white,
-          ),
+          iconTheme: const IconThemeData(color: NokeyColorPalette.white),
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
@@ -60,11 +59,7 @@ class _AdminPanelState extends State<AdminPanel> {
           ),
         ),
         body: const TabBarView(
-          children: [
-            AdminReports(),
-            AdminTemplates(),
-            AdminManagement(),
-          ],
+          children: [AdminReports(), AdminTemplates(), AdminManagement()],
         ),
       ),
     );

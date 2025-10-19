@@ -79,7 +79,7 @@ class LoginForm extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-            
+
             TextButton(
               onPressed: onRegister,
               child: const Text(
