@@ -80,10 +80,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Registro"),
+        backgroundColor:NokeyColorPalette.blue,
+        title: const Text(
+          "Registro",
+          style: TextStyle(
+              color: NokeyColorPalette.white,
+              fontWeight: FontWeight.bold,
+          ),
+        ),
+
         iconTheme: IconThemeData(
           color: NokeyColorPalette.white, // Arrow back - color
         ),
+
+
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -102,7 +113,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: register,
-              child: const Text("Registrarse"),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: NokeyColorPalette.blue, 
+                  foregroundColor: NokeyColorPalette.white, 
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  elevation: 3, 
+                ),
+
+
+              child: Text(
+                "Registrarse",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
