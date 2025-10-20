@@ -8,35 +8,21 @@ class ButtonWidget extends StatelessWidget {
   final Color textColor;
   final double height;
   final String user;
-
-  static int _colorIndex = 0;
-  static final List<Color> _colors = [
-    NokeyColorPalette.mexicanPink,
-    NokeyColorPalette.darkGreen,
-    NokeyColorPalette.purple,
-    NokeyColorPalette.darkBlue,
-    NokeyColorPalette.yellow,
-    NokeyColorPalette.blue,
-  ];
+  final Color backgroundColor;
 
   const ButtonWidget({
     super.key,
     required this.user,
     required this.text,
     required this.onPressed,
+    required this.backgroundColor,
     this.textColor = NokeyColorPalette.white,
     this.height = 55,
   });
 
-  Color get _nextColor {
-    final color = _colors[_colorIndex % _colors.length];
-    _colorIndex++;
-    return color;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final color = _nextColor;
+    final color = backgroundColor;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -72,7 +58,6 @@ class ButtonWidget extends StatelessWidget {
                 ),
               ),
             ),
-
             Positioned(
               top: -18,
               left: 20,
@@ -107,9 +92,7 @@ class ButtonWidget extends StatelessWidget {
             ),
           ],
         ),
-
         const SizedBox(height: 1),
-
         const Text(
           '-Tocar para ver resultados-',
           textAlign: TextAlign.center,
@@ -119,7 +102,6 @@ class ButtonWidget extends StatelessWidget {
             color: NokeyColorPalette.blue,
           ),
         ),
-
         const SizedBox(height: 19),
       ],
     );

@@ -24,7 +24,7 @@ class EditableCard extends StatelessWidget {
       "Grid": NokeyColorPalette.blue,
       "Slider": NokeyColorPalette.yellow,
       "Checkbox": NokeyColorPalette.purple,
-      "Card Swipe": NokeyColorPalette.blueGrey,
+      "Card Swipe": NokeyColorPalette.darkBlue,
     };
 
     return Card(
