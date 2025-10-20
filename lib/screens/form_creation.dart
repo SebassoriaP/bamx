@@ -88,7 +88,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       _cards.add({
         "id": uuid.v4(),
         "type": type,
-        "nameController": TextEditingController(), // 👈 Card Name field
+        "nameController": TextEditingController(),
         "variables": (type == "Grid")
             ? List.generate(
                 2,
@@ -179,7 +179,7 @@ class _FormCreationScreenState extends State<FormCreationScreen> {
       return {
         "id": card["id"],
         "type": card["type"],
-        "name": card["nameController"]?.text ?? "", // 👈 Save card name
+        "name": card["nameController"]?.text ?? "",
         "metadata": metadata,
       };
     }).toList();
