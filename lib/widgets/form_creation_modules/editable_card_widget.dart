@@ -93,7 +93,7 @@ class EditableCard extends StatelessWidget {
                       (i) => VariableInput(
                         controller: card["variables"][i]["nameController"],
                         min: 0,
-                        max: 100,
+                        max: 1000000,
                         currentMin: card["variables"][i]["minValue"],
                         currentMax: card["variables"][i]["maxValue"],
                         onMinChanged: (v) =>
@@ -106,7 +106,7 @@ class EditableCard extends StatelessWidget {
                     VariableInput(
                       controller: card["variables"][0]["nameController"],
                       min: 0,
-                      max: 100,
+                      max: 1000000,
                       currentMin: card["variables"][0]["minValue"],
                       currentMax: card["variables"][0]["maxValue"],
                       onMinChanged: (v) => card["variables"][0]["minValue"] = v,
